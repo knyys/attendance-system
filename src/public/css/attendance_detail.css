@@ -1,0 +1,24 @@
+.attendance-detail{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+.attendance-detail__title{
+    border-left: solid 10px black;
+    padding: 0 0 0 30px ;
+    align-items: flex-start;
+    position: absolute;
+    top: 10%;
+    left: 25%;
+    font-size: 26px;
+    margin: 0;
+}
+
+.attendance-detail__table{
+    position: absolute;
+    top: 30%;
+    left: 25%;
+}

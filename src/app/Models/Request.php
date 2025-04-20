@@ -1,0 +1,33 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Request extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'status',
+        'target_date',
+        'note',
+        'request_date',
+        'start_time',
+        'end_time',
+        'work_time',
+    ];
+
+    //リレーション
+    public function attendance()
+    {
+        return $this->belongsTo(Attendance::class);
+    }
+
+    public function breakTimeRequests()
+    {
+        return $this->hasMany(BreakTimeRequest::class, 'requests_id');
+    }
+
+}
