@@ -3,9 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\User\AttendanceController;
+
 use App\Http\Controllers\User\RequestController;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\User\AttendanceController as UserAttendanceController;
+use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
+
 
 
 
@@ -27,12 +30,13 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 //ログイン
 Route::post('login', [LoginController::class, 'login']);
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 //勤怠画面
 Route::prefix('/attendance')->group(function () {
-    Route::get('', [AttendanceController::class, 'create']); //登録
-    Route::get('/detail',[AttendanceController::class, 'detail']); //詳細
-    Route::get('/list', [AttendanceController::class, 'index']); //一覧
+    Route::get('', [UserAttendanceController::class, 'create']); //登録
+    Route::get('/detail',[UserAttendanceController::class, 'detail']); //詳細
+    Route::get('/list', [UserAttendanceController::class, 'index']); //一覧
 });
 
 
@@ -46,9 +50,10 @@ Route::prefix('admin')->group(function () {
     Route::get('/login', function () {
         return view('auth.login'); 
     });
-    Route::post('login', [LoginController::class, 'adminLogin']);
+    Route::post('/login', [LoginController::class, 'adminLogin']);
+    Route::post('/logout', [LoginController::class, 'adminLogout'])->name('adminLogout');
 
-
+    Route::get('/attendance/list', [AdminAttendanceController::class, 'index'])->name('admin.attendance.list'); //一覧
     /* 
     Route::get('/login', [LoginController::class, 'showLoginForm']);
     Route::get('/attendance/list', [AttendanceController::class, 'list']);

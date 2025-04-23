@@ -27,7 +27,7 @@
         @endif
        
 
-        <form class="form" action="/login" method="post">
+        <form class="form" action="{{ request()->is('admin/login') ? '/admin/login' : '/login' }}" method="post">
             @csrf
             <div class="form__group">
                 <div class="form__label">
