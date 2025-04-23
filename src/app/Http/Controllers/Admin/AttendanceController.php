@@ -13,7 +13,7 @@ class AttendanceController extends Controller
     //管理者用勤怠一覧ページ
     public function index(Request $request)
     {
-        
+        return view('admin.attendance_list');
     }
 
     //管理者用勤怠詳細ページ

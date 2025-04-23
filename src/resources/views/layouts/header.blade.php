@@ -1,4 +1,4 @@
-<!--その他画面用ヘッダー-->
+<!--共通ヘッダー-->
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -21,16 +21,30 @@
 
             <div class="header__inner">
                 @if(Auth::check())
+                    @if(Auth::user()->is_admin == 1)
                     <nav class="header__nav">
-                        <a class="header__link" href="">勤怠</a>
-                        <a class="header__link" href="">勤怠一覧</a>
-                        <a class="header__link" href="">申請</a>
+                        <a class="header__link" href="/admin/attendance/list">勤怠一覧</a>
+                        <a class="header__link" href="/admin/staff/list">スタッフ一覧</a>
+                        <a class="header__link" href="/stamp_correction_request/list">申請一覧</a>
 
-                        <form class="header__logout-form" action="" method="POST">
+                        <form class="header__logout-form" action="{{ route('adminLogout') }}" method="POST">
                             @csrf
                             <button class="header__logout-button" type="submit">ログアウト</button>
                         </form>
                     </nav>
+                    @elseif(Auth::user()->is_admin == 0)
+                    <nav class="header__nav">
+                        <a class="header__link" href="/attendance">勤怠</a>
+                        <a class="header__link" href="/attendance/list">勤怠一覧</a>
+                        <a class="header__link" href="/attendance/detail">申請</a>
+                        <!--href="/attendance/{id}にかえる-->
+
+                        <form class="header__logout-form" action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button class="header__logout-button" type="submit">ログアウト</button>
+                        </form>
+                    </nav>
+                    @endif
                 @endif
             </div>
         </header>
