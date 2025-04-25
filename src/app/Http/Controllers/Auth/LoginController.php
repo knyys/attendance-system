@@ -23,7 +23,7 @@ class LoginController extends Controller
 
         if ($user && $user->is_admin === 0 && Hash::check($data['password'], $user->password)) {
             Auth::login($user);
-            return redirect('/admin/attendance/list');
+            return redirect('/attendance');
         }
     
         // 認証失敗時、エラーメッセージを表示し入力値を保持

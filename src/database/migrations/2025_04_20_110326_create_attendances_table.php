@@ -17,9 +17,10 @@ class CreateAttendancesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->date('date');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->time('work_time');
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
+            $table->time('work_time')->nullable();
+            $table->timestamps();
         });
     }
 

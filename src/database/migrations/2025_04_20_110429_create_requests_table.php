@@ -20,9 +20,10 @@ class CreateRequestsTable extends Migration
             $table->date('target_date');
             $table->text('note');
             $table->date('request_date');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->time('work_time');
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
+            $table->time('work_time')->nullable();
+            $table->timestamps();
         });
     }
 

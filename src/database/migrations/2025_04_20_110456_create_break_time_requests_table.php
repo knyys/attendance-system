@@ -16,8 +16,8 @@ class CreateBreakTimeRequestsTable extends Migration
         Schema::create('break_time_requests', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('request_id');$table->unsignedBigInteger('break_time_id');
-            $table->time('start_time');
-            $table->time('end_time');
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
             $table->timestamps();
         });
     }
