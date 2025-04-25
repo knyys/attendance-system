@@ -10,6 +10,7 @@ class Request extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'status',
         'target_date',
         'note',

@@ -34,7 +34,9 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 //勤怠画面
 Route::prefix('/attendance')->group(function () {
-    Route::get('', [UserAttendanceController::class, 'create']); //登録
+    Route::get('', [UserAttendanceController::class, 'create']); //登録画面表示
+    Route::post('', [UserAttendanceController::class, 'store'])->name('attendance.action'); //登録
+
     Route::get('/detail',[UserAttendanceController::class, 'detail']); //詳細
     Route::get('/list', [UserAttendanceController::class, 'index']); //一覧
 });
