@@ -1,27 +1,38 @@
-.content{
-    position: relative;
+body{
+    background-color: rgb(231, 231, 231);
+}
 
+.content{
+    margin-top: 10%;
 }
 
 .attendance-register{
-    position: absolute;
-    top: 40%;
     display: flex;
     flex-direction: column;
     width: 100%;
     height: auto;
     align-items: center;
+}
+
+.attendance-status{
+    display: flex;
     justify-content: center;
-    
+    align-items: center;
+    padding: 3px 20px;
+    background-color: rgb(192, 191, 191);
+    border-radius: 30px;
+    font-size: 18px;
+    margin: 0;
+    color:rgb(76, 75, 75);
 }
 
 .attendance-info__date{
-    font-size: 32px;
+    font-size: 36px;
     margin: 30px 0 0 0;
 }
 
 .attendance-info__time{
-    font-size: 60px;
+    font-size: 65px;
     text-align: center;
     align-items: center;
     font-weight: bold;
@@ -47,7 +58,6 @@
     text-align: center;
     padding: 5px 50px;
     margin-top: 30px;
-    
 }
 
 .attendance-register__button--break {
@@ -66,5 +76,5 @@
 
 .message{
     font-size: 20px;
-    margin-top: 20px;
+    margin-top: 40px;
 }

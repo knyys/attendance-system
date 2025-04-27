@@ -6,23 +6,9 @@ use App\Http\Controllers\Auth\LoginController;
 
 use App\Http\Controllers\User\RequestController;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
-use App\Http\Controllers\User\AttendanceController as UserAttendanceController;
-use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController;
+use App\Http\Controllers\AttendanceController;
 
 
-
-
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 /* 一般ユーザー用 */
 //会員登録
@@ -34,11 +20,11 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 //勤怠画面
 Route::prefix('/attendance')->group(function () {
-    Route::get('', [UserAttendanceController::class, 'create']); //登録画面表示
-    Route::post('', [UserAttendanceController::class, 'store'])->name('attendance.action'); //登録
+    Route::get('', [AttendanceController::class, 'create']); //登録画面表示
+    Route::post('', [AttendanceController::class, 'store'])->name('attendance.action'); //登録
 
-    Route::get('/detail',[UserAttendanceController::class, 'detail']); //詳細
-    Route::get('/list', [UserAttendanceController::class, 'index']); //一覧
+    Route::get('/detail',[AttendanceController::class, 'AttendanceDetail']); //詳細
+    Route::get('/list', [AttendanceController::class, 'showAttendanceList']); //一覧
 });
 
 
@@ -55,7 +41,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/login', [LoginController::class, 'adminLogin']);
     Route::post('/logout', [LoginController::class, 'adminLogout'])->name('adminLogout');
 
-    Route::get('/attendance/list', [AdminAttendanceController::class, 'index'])->name('admin.attendance.list'); //一覧
+    Route::get('/attendance/list', [AttendanceController::class, 'showAdminAttendanceList'])->name('admin.attendance.list'); //一覧
     /* 
     Route::get('/login', [LoginController::class, 'showLoginForm']);
     Route::get('/attendance/list', [AttendanceController::class, 'list']);

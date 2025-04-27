@@ -8,11 +8,25 @@
 @section('content')
 <div class="content">
     <div class="attendance-register">
+        <div class="attendance-register-status">
+             @if ($status === 'not_working')
+                <p class="attendance-status">勤務外</p>
+
+            @elseif ($status === 'working')
+                <p class="attendance-status">出勤中</p>
+
+            @elseif ($status === 'on_break')
+                <p class="attendance-status">休憩中</p>
+
+            @elseif ($status === 'end_work')
+                <p class="attendance-status">退勤済</p>
+
+            @endif
+        </div>
         <div class="attendance-info">
             <p class="attendance-info__date">{{ $now_day }} ({{ $dayName }})</p>
             <p class="attendance-info__time">{{ $now_time }}</p>
         </div>
-        {{-- 出勤・休憩・退勤 --}}
         <form class="attendance-register__form" action="{{ route('attendance.action') }}" method="POST">
             @csrf
             <input type="hidden" name="user_id" value="{{ Auth::id() }}">
