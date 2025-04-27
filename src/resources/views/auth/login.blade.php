@@ -14,7 +14,11 @@
 <div class="login-form">
     <div class="login-form__content">
         <div class="login-form__heading">
+            @if (!request()->is('admin/login'))
             <h2>ログイン</h2>
+            @else
+            <h2>管理者ログイン</h2>
+            @endif
         </div>
         
         @if ($errors->has('login'))
@@ -58,7 +62,11 @@
             </div>
         
             <div class="form__btn">
+                @if (!request()->is('admin/login'))
                 <button type="submit">ログインする</button>
+                @else
+                <button type="submit">管理者ログインする</button>
+                @endif
             </div>
         </form>
         @if (!request()->is('admin/login'))

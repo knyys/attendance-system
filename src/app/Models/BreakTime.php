@@ -14,6 +14,7 @@ class BreakTime extends Model
         'date',
         'start_time',
         'end_time',
+        'total_break_time',
     ];
 
     //リレーション
