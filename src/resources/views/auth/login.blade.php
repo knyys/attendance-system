@@ -1,5 +1,5 @@
 <!--一般ユーザー用ログイン画面-->
-@extends('layouts.header')
+@extends('layouts.app')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/login.css') }}">

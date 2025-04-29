@@ -111,10 +111,8 @@ class AttendanceController extends Controller
                     ->first();
 
                 if ($breakTime) {
-                    // 休憩時間を終了する
                     $breakTime->update(['end_time' => $now]);
 
-                    // 休憩時間の合計を再計算して保存
                     $totalBreakSeconds = BreakTime::where('user_id', $userId)
                         ->where('date', $today)
                         ->whereNotNull('end_time')
@@ -122,13 +120,10 @@ class AttendanceController extends Controller
                         ->reduce(function ($carry, $break) {
                             $start = Carbon::parse($break->start_time);
                             $end = Carbon::parse($break->end_time);
-                            return $carry + $end->diffInSeconds($start); // 秒単位で合計
+                            return $carry + $end->diffInSeconds($start); 
                         }, 0);
-
-                    // 合計休憩時間を h:i:s フォーマットに変換
                     $totalBreakTimeFormatted = gmdate('H:i:s', $totalBreakSeconds);
 
-                    // 合計休憩時間を更新
                     $breakTime->update(['total_break_time' => $totalBreakTimeFormatted]);
                 }
 
@@ -144,6 +139,7 @@ class AttendanceController extends Controller
     public function showAttendanceList(Request $request)
     {
         $user = auth()->user();
+        Carbon::setLocale('ja');
 
         $year = $request->query('year', now()->year);
         $month = $request->query('month', now()->month);
@@ -154,6 +150,7 @@ class AttendanceController extends Controller
         $attendances = Attendance::where('user_id', $user->id)
             ->whereYear('date', $date->year)
             ->whereMonth('date', $date->month)
+            ->whereNotNull('end_time')
             ->orderBy('date', 'asc')
             ->get();
 
@@ -161,13 +158,14 @@ class AttendanceController extends Controller
             ->whereYear('date', $date->year)
             ->whereMonth('date', $date->month)
             ->get()
-            ->groupBy('date');    
+            ->groupBy('date');
 
-        // 各出勤データに休憩時間の合計を計算して追加
+        $daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
+
         foreach ($attendances as $attendance) {
             $breakTimesForDay = $breakTimes->get($attendance->date);
 
-            $totalBreakTime = ''; // デフォルト値
+            $totalBreakTime = '';
 
             if ($breakTimesForDay) {
                 $totalBreakSeconds = $breakTimesForDay->reduce(function ($carry, $break) {
@@ -175,18 +173,29 @@ class AttendanceController extends Controller
                     $end = Carbon::parse($break->end_time);
                     return $carry + $end->diffInSeconds($start);
                 }, 0);
-
-                // 合計休憩時間（秒数）を H:i:s 形式に変換
-                $totalBreakTime = gmdate('H:i:s', $totalBreakSeconds);
+                $totalBreakTime = gmdate('H:i', $totalBreakSeconds);
             }
 
-            // 出勤データに休憩時間を追加
             $attendance->total_break_time = $totalBreakTime;
+
+            if (!empty($attendance->start_time)) {
+                $attendance->start_time = Carbon::parse($attendance->start_time)->format('H:i');
+            }
+            if (!empty($attendance->end_time)) {
+                $attendance->end_time = Carbon::parse($attendance->end_time)->format('H:i');
+            }
+            if (!empty($attendance->work_time)) {
+                $attendance->work_time = Carbon::parse($attendance->work_time)->format('H:i');
+            }
+
+            // 日付を 'mm/dd（曜日）' 形式に変換
+            $formattedDate = Carbon::parse($attendance->date)->format('m/d');
+            $weekday = $daysOfWeek[Carbon::parse($attendance->date)->dayOfWeek];
+            $attendance->formatted_date = "{$formattedDate}（{$weekday}）";
         }
 
         return view('user.attendance_list', [
             'attendances' => $attendances,
-            'breakTimes' => $breakTimes,
             'current' => $date,
             'prev' => $prev,
             'next' => $next,
@@ -194,11 +203,23 @@ class AttendanceController extends Controller
     }
 
     //一般ユーザー用勤怠詳細ページ
-    public function AttendanceDetail(Request $request)
+    public function AttendanceDetail($id)
     {
-        return view('user.attendance_detail');
+        $attendance = Attendance::with('user')->findOrFail($id);
+        $user = $attendance->user ?? auth()->user();
+        
+        $breakTimes = BreakTime::where('user_id', $attendance->user_id)
+                        ->where('date', $attendance->date)
+                        ->get();
+
+        return view('user.attendance_detail', [
+            'attendance' => $attendance,
+            'user' => $user,
+            'breakTimes' => $breakTimes,
+        ]);
     }
 
+    
     //一般ユーザー用勤怠詳細処理
     public function editAttendanceDetail(Request $request)
     {

@@ -1,5 +1,5 @@
 <!--修正申請承認画面（管理者）-->
-@extends('layouts.header')
+@extends('layouts.app')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/user_attendance_detail.css') }}">
