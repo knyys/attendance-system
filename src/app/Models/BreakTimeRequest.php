@@ -18,12 +18,12 @@ class BreakTimeRequest extends Model
     //リレーション
     public function request()
     {
-        return $this->belongsTo(Request::class, 'requests_id');
+        return $this->belongsTo(CorrectRequest::class, 'requests_id');
     }
 
-    public function breakTime()
+    public function attendance()
     {
-        return $this->belongsTo(BreakTime::class);
+        return $this->belongsTo(Attendance::class, 'user_id');
     }
 
 }

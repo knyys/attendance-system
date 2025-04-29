@@ -24,7 +24,13 @@ class Attendance extends Model
 
     public function request()
     {
-        return $this->hasOne(Request::class);
+        return $this->hasOne(CorrectRequest::class);
     }
 
+    public function breakTime()
+    {
+        return $this->hasMany(BreakTime::class, 'user_id', 'user_id') 
+                    ->where('date', $this->date); 
+        
+    }
 }

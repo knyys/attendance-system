@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 
-use App\Http\Controllers\User\RequestController;
+use App\Http\Controllers\RequestController;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\AttendanceController;
 
@@ -19,16 +19,11 @@ Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 //勤怠画面
-Route::prefix('/attendance')->group(function () {
-    Route::get('', [AttendanceController::class, 'create']); //登録画面表示
-    Route::post('', [AttendanceController::class, 'store'])->name('attendance.action'); //登録
-
-    Route::get('/detail',[AttendanceController::class, 'AttendanceDetail']); //詳細
-    Route::get('/list', [AttendanceController::class, 'showAttendanceList']); //一覧
-});
-
-
-
+Route::get('/attendance', [AttendanceController::class, 'create']); //登録画面表示
+Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.action'); //登録
+Route::get('/attendance/list', [AttendanceController::class, 'showAttendanceList'])->name('attendance.list'); //一覧
+Route::get('/attendance/{id}', [AttendanceController::class, 'AttendanceDetail'])->name('attendance.detail');//詳細
+Route::get('/stamp_correction_request/list', [RequestController::class, 'showRequestList'])->name('request.list'); //申請一覧
 
 
 

@@ -1,5 +1,5 @@
 <!--出勤登録画面（一般ユーザー）-->
-@extends('layouts.header')
+@extends('layouts.app')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/attendance_register.css') }}">
