@@ -6,10 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AttendanceRequest;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\Attendance;
 use App\Models\BreakTime;
-use App\Models\AttendanceDetail;
+use App\Models\BreakTimeRequest;
+use App\Models\CorrectRequest;
 
 class AttendanceController extends Controller
 {
@@ -203,28 +206,68 @@ class AttendanceController extends Controller
     }
 
     //一般ユーザー用勤怠詳細ページ
-    public function AttendanceDetail($id)
+    public function attendanceDetail($id)
     {
-        $attendance = Attendance::with('user')->findOrFail($id);
-        $user = $attendance->user ?? auth()->user();
-        
-        $breakTimes = BreakTime::where('user_id', $attendance->user_id)
-                        ->where('date', $attendance->date)
-                        ->get();
+        $attendance = Attendance::findOrFail($id);
+        $breakTimes = BreakTime::where('attendance_id', $id)->get();
+        $isRequested = CorrectRequest::where('attendance_id', $id)->exists();
 
-        return view('user.attendance_detail', [
-            'attendance' => $attendance,
-            'user' => $user,
-            'breakTimes' => $breakTimes,
+        return view('user.attendance_detail', ['data' => $attendance, 'breakTimes' => $breakTimes, 'isRequested' => $isRequested,]);
+    }
+
+    //一般ユーザー用勤怠詳細処理(修正申請)
+    public function editAttendanceDetail(AttendanceRequest $request, $id)
+    {
+        $attendance = Attendance::findOrFail($id);
+
+        // 勤怠修正申請の保存
+        $correctRequest = CorrectRequest::create([
+            'user_id' => auth()->id(),
+            'attendance_id' => $attendance->id,
+            'start_time' => $request->input('start_time'),
+            'end_time' => $request->input('end_time'),
+            'note' => $request->input('note'),
+            'status' => 0,
+            'target_date' => $attendance->date,
+            'request_date' => now(),
         ]);
+
+        $totalBreakSeconds = 0; // 合計の休憩時間（秒）
+
+        // 休憩時間の保存（複数対応）
+        if ($request->has('break_start_time') && $request->has('break_end_time')) {
+            $startTimes = $request->input('break_start_time');
+            $endTimes = $request->input('break_end_time');
+
+            for ($i = 0; $i < count($startTimes); $i++) {
+                if ($startTimes[$i] && $endTimes[$i]) {
+                    $start = strtotime($startTimes[$i]);
+                    $end = strtotime($endTimes[$i]);
+                    $breakDuration = $end - $start;
+                    $totalBreakSeconds += $breakDuration;
+
+                    // 既存のBreakTimeがあれば使用、なければnull（承認時に作成）
+                    $existingBreak = BreakTime::where('user_id', auth()->id())
+                        ->where('date', $attendance->date)
+                        ->where('start_time', $startTimes[$i])
+                        ->where('end_time', $endTimes[$i])
+                        ->first();
+
+                    BreakTimeRequest::create([
+                        'correct_request_id' => $correctRequest->id,
+                        'break_time_id' => $existingBreak ? $existingBreak->id : null,
+                        'start_time' => $startTimes[$i],
+                        'end_time' => $endTimes[$i],
+                        'total_break_time' => $breakDuration,
+                    ]);
+                }
+            }
+        }
+        
+       return redirect()->route('attendance.detail', ['id' => $attendance->id])->with('requested', true);
     }
 
-    
-    //一般ユーザー用勤怠詳細処理
-    public function editAttendanceDetail(Request $request)
-    {
-        
-    }
+
 
     //管理者用勤怠一覧ページ
     public function showAdminAttendanceList()

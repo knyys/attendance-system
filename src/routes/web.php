@@ -23,6 +23,7 @@ Route::get('/attendance', [AttendanceController::class, 'create']); //登録画�
 Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.action'); //登録
 Route::get('/attendance/list', [AttendanceController::class, 'showAttendanceList'])->name('attendance.list'); //一覧
 Route::get('/attendance/{id}', [AttendanceController::class, 'AttendanceDetail'])->name('attendance.detail');//詳細
+Route::post('/attendance/{id}', [AttendanceController::class, 'editAttendanceDetail'])->name('detail.request');//修正申請
 Route::get('/stamp_correction_request/list', [RequestController::class, 'showRequestList'])->name('request.list'); //申請一覧
 
 

@@ -12,58 +12,105 @@
             勤怠詳細
         </h2>
 
-        <form action="" method="">
+        <form action="{{ route('detail.request', ['id' => $data->id]) }}" method="post">
+            @csrf
             <table class="attendance-detail__table">
                 <tr class="attendance-detail__row">
                     <td class="attendance-detail__label">名前</td>
-                    <td class="attendance-detail__value">{{ $user->name }}</td>
+                    <td class="attendance-detail__value">{{ $data->user->name }}</td>
                 </tr>
                 <tr class="attendance-detail__row">
                     <td class="attendance-detail__label">日付</td>
                     <td class="attendance-detail__value">
-                        <span class="attendance-detail__value--day">{{ \Carbon\Carbon::parse($attendance->date)->format('Y年') }}</span>
-                        <span class="attendance-detail__value--day">{{ \Carbon\Carbon::parse($attendance->date)->format('n月j日') }}</span></td>
+                        <span class="attendance-detail__value--day">
+                            {{ \Carbon\Carbon::parse($data->date)->format('Y年') }}
+                        </span>
+                        <span class="attendance-detail__value--day">
+                            {{ \Carbon\Carbon::parse($data->date)->format('n月j日') }}
+                        </span>
+                    </td>
                 </tr>
                 <tr class="attendance-detail__row">
                     <td class="attendance-detail__label">出勤・退勤</td>
                     <td class="attendance-detail__value">
-                        <input class="attendance-detail__input" type="text" name="start_time" value="{{ \Carbon\Carbon::parse($attendance->start_time)->format('H:i')  }}">
-                        <span class="attendance-detail__input-separator">~</span>
-                        <input class="attendance-detail__input" type="text" name="end_time" value="{{ \Carbon\Carbon::parse($attendance->end_time)->format('H:i') }}">
+                        <div>
+                                <input class="attendance-detail__input" type="text" name="start_time" value="{{ old("start_time", \Carbon\Carbon::parse($data->start_time)->format('H:i')) }}" @if($isRequested) disabled @endif>
+                                <span class="attendance-detail__input-separator">~</span>
+                                <input class="attendance-detail__input" type="text" name="end_time" value="{{ old("end_time", \Carbon\Carbon::parse($data->end_time)->format('H:i')) }}" @if($isRequested) disabled @endif>
+                        </div>
+                        <div class="form__error">
+                            @error('start_time')
+                                <div>{{ $message }}</div>
+                            @enderror
+                            @error('end_time')
+                                <div>{{ $message }}</div>
+                            @enderror
+                        </div>
                     </td>
                 </tr>
                 
                 @if($breakTimes->isNotEmpty())
-                @foreach($breakTimes as $breakTime)
+                    @foreach($breakTimes as $index => $breakTime)
                     <tr class="attendance-detail__row">
                         <td class="attendance-detail__label">休憩</td>
                         <td class="attendance-detail__value">
-                            <input class="attendance-detail__input" type="text" name="break_start_time[]" value="{{ \Carbon\Carbon::parse($breakTime->start_time)->format('H:i')  }}">
-                            <span class="attendance-detail__input-separator">~</span>
-                            <input class="attendance-detail__input" type="text" name="break_end_time[]" value="{{ \Carbon\Carbon::parse($breakTime->end_time)->format('H:i')  }}">
+                            <div>
+                                <input class="attendance-detail__input" type="text" name="break_start_time[]" value="{{ old("break_start_time.$index", \Carbon\Carbon::parse($breakTime->start_time)->format('H:i')) }}" @if($isRequested) disabled @endif>
+                                <span class="attendance-detail__input-separator">~</span>
+                                <input class="attendance-detail__input" type="text" name="break_end_time[]" value="{{ old("break_end_time.$index", \Carbon\Carbon::parse($breakTime->end_time)->format('H:i')) }}" @if($isRequested) disabled @endif>
+                            </div>
+                            <div class="form__error">
+                                @error("break_start_time.$index")
+                                    <div>{{ $message }}</div>
+                                @enderror
+                                @error("break_end_time.$index")
+                                    <div>{{ $message }}</div>
+                                @enderror
+                            </div>
                         </td>
                     </tr>
-                @endforeach
+                    @endforeach
                 @else
                     <tr class="attendance-detail__row">
                         <td class="attendance-detail__label">休憩</td>
                         <td class="attendance-detail__value">
-                            <input class="attendance-detail__input" type="text" name="break_start_time[]" value="">
-                            <span class="attendance-detail__input-separator">~</span>
-                            <input class="attendance-detail__input" type="text" name="break_end_time[]" value="">
+                            <div>
+                                <input class="attendance-detail__input" type="text" name="break_start_time[]" value="" @if($isRequested) disabled @endif>
+                                <span class="attendance-detail__input-separator">~</span>
+                                <input class="attendance-detail__input" type="text" name="break_end_time[]" value="" @if($isRequested) disabled @endif>
+                            </div>
+                            <div class="form__error">
+                                @error("break_start_time.0")
+                                    <div>{{ $message }}</div>
+                                @enderror
+                                @error("break_end_time.0")
+                                    <div>{{ $message }}</div>
+                                @enderror
+                            </div>
                         </td>
                     </tr>
                 @endif
-                
                 <tr class="attendance-detail__row">
                     <td class="attendance-detail__label">備考</td>
+                    
                     <td class="attendance-detail__value--textarea">
-                        <textarea class="attendance-detail__input-note" name="note" rows="5" cols="30"></textarea>
+                        <div>
+                            <textarea class="attendance-detail__input-note" name="note" rows="5" cols="30" @if($isRequested) disabled @endif></textarea>
+                        </div>                  
+                        <div class="form__error">
+                            @error('note')
+                                <div>{{ $message }}</div>
+                            @enderror
+                        </div>
                     </td>
                 </tr>
-            </table>
+            </table>        
             <div class="attendance-detail__button">
-                <button type="submit">修正</button>
+                @if($isRequested)
+                    <p class="notice">*承認済のため修正はできません。</p>
+                @else
+                    <button type="submit">修正</button>
+                @endif
             </div>
         </form> 
     </div>

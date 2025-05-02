@@ -11,6 +11,7 @@ class CorrectRequest extends Model
 
     protected $fillable = [
         'user_id',
+        'attendance_id',
         'status',
         'target_date',
         'note',

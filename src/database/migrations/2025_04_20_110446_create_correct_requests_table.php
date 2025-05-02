@@ -13,16 +13,16 @@ class CreateCorrectRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('requests', function (Blueprint $table) {
+        Schema::create('correct_requests', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('attendance_id');
-            $table->boolean('status')->default(false);
+            $table->foreignId('attendance_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->boolean('status')->default(0);
             $table->date('target_date');
             $table->text('note');
             $table->date('request_date');
-            $table->time('start_time')->nullable();
-            $table->time('end_time')->nullable();
-            $table->time('work_time')->nullable();
+            $table->time('start_time');
+            $table->time('end_time');
             $table->timestamps();
         });
     }
@@ -34,6 +34,6 @@ class CreateCorrectRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('requests');
+        Schema::dropIfExists('correct_requests');
     }
 }

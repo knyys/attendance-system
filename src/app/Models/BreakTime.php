@@ -11,6 +11,7 @@ class BreakTime extends Model
 
     protected $fillable = [
         'user_id',
+        'attendance_id',
         'date',
         'start_time',
         'end_time',
@@ -28,9 +29,9 @@ class BreakTime extends Model
         return $this->hasMany(BreakTimeRequest::class);
     }
 
-     public function attendance()
+     public function attendances()
     {
-        return $this->belongsTo(Attendance::class, 'user_id');
+        return $this->belongsTo(Attendance::class, 'attendance_id');
     }
 
 }
