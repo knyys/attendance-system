@@ -22,14 +22,16 @@
             <td>合計</td>
             <td>詳細</td>
         </tr>
-        @foreach ($attendances as $attendance)
+        @foreach ($attendances as $item)
         <tr class="attendance-table-row">
-            <td>{{ $attendance->formatted_date }}</td>
-            <td>{{ $attendance->start_time }}</td>
-            <td>{{ $attendance->end_time }}</td>
-            <td>{{ $attendance->total_break_time }}</td>
-            <td>{{ $attendance->work_time }}</td>
-            <td><a class="attendance-table-detail" href="{{ route('attendance.detail', ['id' => $attendance->id]) }}">詳細</a></td>
+            <td>{{ $item->formatted_date }}</td>
+            <td>{{ $item->start_time }}</td>
+            <td>{{ $item->end_time }}</td>
+            <td>{{ $item->total_break_time }}</td>
+            <td>{{ $item->work_time }}</td>
+            <td>
+                <a class="attendance-table-detail" href="{{ route('attendance.detail', ['id' => $item->id]) }}">詳細</a>
+            </td>
         </tr>
         @endforeach
     </table>

@@ -6,6 +6,7 @@ body {
     position: relative;
     height: auto;
     width: 100%;
+    max-width: 100vw;
 }
 
 .content h2 {
@@ -64,7 +65,7 @@ body {
 
 td {
     border-bottom: 2px solid rgb(182, 180, 180);
-    padding: 10px 0 10px 30px;
+    padding: 10px 0 10px 50px;
     text-align: left;
 }
 

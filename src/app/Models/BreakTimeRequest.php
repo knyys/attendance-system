@@ -10,13 +10,15 @@ class BreakTimeRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'correct_request_id',
         'start_time',
         'end_time',
+        'total_break_time',
+        'break_time_id' ,
     ];
 
     //リレーション
-    public function request()
+    public function correctRequest()
     {
         return $this->belongsTo(CorrectRequest::class, 'requests_id');
     }
