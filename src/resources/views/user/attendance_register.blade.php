@@ -18,7 +18,7 @@
             @elseif ($status === 'on_break')
                 <p class="attendance-status">休憩中</p>
 
-            @elseif ($status === 'end_work')
+            @elseif ($status === 'finished')
                 <p class="attendance-status">退勤済</p>
 
             @endif

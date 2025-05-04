@@ -211,8 +211,22 @@ class AttendanceController extends Controller
         $attendance = Attendance::findOrFail($id);
         $breakTimes = BreakTime::where('attendance_id', $id)->get();
         $isRequested = CorrectRequest::where('attendance_id', $id)->exists();
+       
+        $correctRequest = null;
+        $breakTimeRequests = collect(); // 空のコレクションを用意
 
-        return view('user.attendance_detail', ['data' => $attendance, 'breakTimes' => $breakTimes, 'isRequested' => $isRequested,]);
+        if ($isRequested) {
+            $correctRequest = CorrectRequest::where('attendance_id', $id)->first();
+            $breakTimeRequests = BreakTimeRequest::where('correct_request_id', $correctRequest->id)->get();
+        }
+
+        return view('user.attendance_detail', [
+            'data' => $attendance, 
+            'breakTimes' => $breakTimes, 
+            'isRequested' => $isRequested, 
+            'correctRequest' => $correctRequest, 
+            'breakTimeRequests' => $breakTimeRequests
+        ]);
     }
 
     //一般ユーザー用勤怠詳細処理(修正申請)
@@ -235,9 +249,14 @@ class AttendanceController extends Controller
         $totalBreakSeconds = 0; // 合計の休憩時間（秒）
 
         // 休憩時間の保存（複数対応）
-        if ($request->has('break_start_time') && $request->has('break_end_time')) {
+        if (
+            $request->has('break_start_time') &&
+            $request->has('break_end_time') &&
+            $request->has('break_time_id')
+        ) {
             $startTimes = $request->input('break_start_time');
             $endTimes = $request->input('break_end_time');
+            $breakTimeIds = $request->input('break_time_id');
 
             for ($i = 0; $i < count($startTimes); $i++) {
                 if ($startTimes[$i] && $endTimes[$i]) {
@@ -246,19 +265,12 @@ class AttendanceController extends Controller
                     $breakDuration = $end - $start;
                     $totalBreakSeconds += $breakDuration;
 
-                    // 既存のBreakTimeがあれば使用、なければnull（承認時に作成）
-                    $existingBreak = BreakTime::where('user_id', auth()->id())
-                        ->where('date', $attendance->date)
-                        ->where('start_time', $startTimes[$i])
-                        ->where('end_time', $endTimes[$i])
-                        ->first();
-
                     BreakTimeRequest::create([
                         'correct_request_id' => $correctRequest->id,
-                        'break_time_id' => $existingBreak ? $existingBreak->id : null,
+                        'break_time_id' => $breakTimeIds[$i] ?? null,
                         'start_time' => $startTimes[$i],
                         'end_time' => $endTimes[$i],
-                        'total_break_time' => $breakDuration,
+                        'total_break_time' => gmdate('H:i', $breakDuration),
                     ]);
                 }
             }
