@@ -118,5 +118,20 @@ padding: 10px 0;
     color: red;
     margin: 10px 0;
     font-weight: normal;
+}
 
+.attendance-detail__input--requested{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 40%;
+    padding: 0 5px;
+}
+
+.attendance-detail__note--requested {
+    height: auto;
+    font-size: 20px;
+    width: 280px;
+    color: black;
+    padding: 0 5px;
 }
