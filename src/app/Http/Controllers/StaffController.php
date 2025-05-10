@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -13,15 +13,15 @@ class StaffController extends Controller
 
 
     //スタッフ一覧ページ
-    public function index(Request $request)
+    public function showStaffList(Request $request)
     {
-        
+        return view('admin.staff_list');
     }
 
     //スタッフ別勤怠一覧ページ
     public function staffAttendanceList(Request $request)
     {
-        
+        return view('admin.staff_attendance_list');
     }
 
 }

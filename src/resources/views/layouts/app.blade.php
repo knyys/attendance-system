@@ -32,12 +32,21 @@
                             <button class="header__logout-button" type="submit">ログアウト</button>
                         </form>
                     </nav>
+                    
                     @elseif(Auth::user()->is_admin == 0)
+                    @php
+                        $attendance = Auth::user()->todayAttendance;
+                        $isClockedOut = $attendance && $attendance->end_time;
+                    @endphp
                     <nav class="header__nav">
-                        <a class="header__link" href="/attendance">勤怠</a>
-                        <a class="header__link" href="/attendance/list">勤怠一覧</a>
-                        <a class="header__link" href="/stamp_correction_request/list">申請</a>
-
+                        @if($isClockedOut)
+                            <a class="header__link" href="/attendance/list">今月の勤怠一覧</a>
+                            <a class="header__link" href="/stamp_correction_request/list">申請一覧</a>
+                        @else
+                            <a class="header__link" href="/attendance">勤怠</a>
+                            <a class="header__link" href="/attendance/list">勤怠一覧</a>
+                            <a class="header__link" href="/stamp_correction_request/list">申請</a>
+                        @endif
                         <form class="header__logout-form" action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button class="header__logout-button" type="submit">ログアウト</button>

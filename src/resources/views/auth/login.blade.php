@@ -31,7 +31,7 @@
         @endif
        
 
-        <form class="form" action="{{ request()->is('admin/login') ? '/admin/login' : '/login' }}" method="post">
+        <form class="form" action="{{ request()->is('admin/login') ? '/admin/login' : '/login' }}" method="post" novalidate>
             @csrf
             <div class="form__group">
                 <div class="form__label">

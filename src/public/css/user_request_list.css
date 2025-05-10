@@ -73,15 +73,37 @@ body {
     border-radius: 10px;
 }
 
-.request-table__label--status{
+.request-table-header,
+.request-table-row{
+    grid-template-columns: repeat(6, 1fr);
+    display: grid;
+}
+
+.table-row__status{
     text-align: center;
 }
 
-.request-table__label{
+.table-row__label,
+.table-row__cell{
     text-align: left;
+    
 }
 
+.request-table-header {
+    border-bottom: 3px solid rgb(182, 180, 180);
+    padding: 10px 0;
+    grid-template-columns: repeat(6, 1fr);
+    display: grid;
+}
 .request-table-row td {
     border-bottom: 2px solid rgb(182, 180, 180);
-    padding: 10px 10px;   
+    padding: 10px 0; 
+    
+}
+
+.request-table-row td a{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
 }

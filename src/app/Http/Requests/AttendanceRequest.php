@@ -40,22 +40,4 @@ class AttendanceRequest extends FormRequest
             'note.required' => '備考を記入してください',
         ];
     }
-
-    public function withValidator($validator)
-    {
-        $validator->after(function ($validator) {
-            $startTimes = $this->input('break_start_time');
-            $endTimes = $this->input('break_end_time');
-
-            if (is_array($startTimes) && is_array($endTimes)) {
-                foreach ($startTimes as $i => $start) {
-                    if (!empty($start) && !empty($endTimes[$i])) {
-                        if (strtotime($endTimes[$i]) <= strtotime($start)) {
-                            $validator->errors()->add("break_end_time.$i", '休憩終了時刻は開始時刻より後にしてください。');
-                        }
-                    }
-                }
-            }
-        });
-    }
 }
