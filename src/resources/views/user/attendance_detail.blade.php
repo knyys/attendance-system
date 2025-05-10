@@ -12,7 +12,8 @@
             勤怠詳細
         </h2>
 
-        @if(!$isRequested) <!--詳細未申請-->
+        @if($isEditable)
+        <!-- 修正フォーム表示 -->
         <form action="{{ route('detail.request', ['id' => $data->id]) }}" method="post">
             @csrf
             <table class="attendance-detail__table">
@@ -111,7 +112,7 @@
                     <td class="attendance-detail__label">備考</td>
                     <td class="attendance-detail__value--textarea">
                        <div>
-                            <textarea class="attendance-detail__input-note" name="note" rows="5" cols="30"></textarea>
+                            <textarea class="attendance-detail__input-note" name="note" rows="5" cols="30">{{ old('note') }}</textarea>
                         </div>                  
                         <div class="form__error">
                             @error('note')
@@ -126,7 +127,7 @@
             </div>
         </form>
 
-    @else <!--申請済-->
+    @else <!-- 修正フォーム非表示 -->
         <table class="attendance-detail__table">
             <tr class="attendance-detail__row">
                 <td class="attendance-detail__label">名前</td>
@@ -192,7 +193,7 @@
             </tr>
             </table>        
             <div class="attendance-detail__button">
-                <p class="notice">*承認済のため修正はできません。</p>
+                <p class="notice">*承認待ちのため修正はできません。</p>
             </div>
     @endif
     </div>

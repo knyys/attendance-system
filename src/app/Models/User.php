@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Date;
+use App\Models\Attendance;
+use App\Models\BreakTime;
+
 
 class User extends Authenticatable
 {
@@ -47,6 +51,11 @@ class User extends Authenticatable
         public function attendances()
     {
         return $this->hasMany(Attendance::class);
+    }
+
+    public function todayAttendance()
+    {
+        return $this->hasOne(Attendance::class)->whereDate('date', today());
     }
 
     public function breakTimes()

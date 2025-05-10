@@ -30,22 +30,22 @@
         @if ($currentPage == 'request')
         <article class="tab-content active" id="content_1">
             <table class="request-table">
-                <tr class="request-table-row">
-                    <td class="request-table__label--status">状態</td>
-                    <td class="request-table__label">名前</td>
-                    <td class="request-table__label">対象日時</td>
-                    <td class="request-table__label">申請理由</td>
-                    <td class="request-table__label">申請日時</td>
-                    <td class="request-table__label">詳細</td>
+                <tr class="request-table-header">
+                    <td class="table-row__status">状態</td>
+                    <td class="table-row__label">名前</td>
+                    <td class="table-row__label">対象日時</td>
+                    <td class="table-row__label">申請理由</td>
+                    <td class="table-row__label">申請日時</td>
+                    <td class="table-row__label">詳細</td>
                 </tr>
                 @foreach ($requests as $req)
                 <tr class="request-table-row">
-                    <td>承認待ち</td>
-                    <td>{{ $req->attendance->user->name }}</td>
-                    <td>{{ $req->target_date }}</td>
-                    <td>{{ $req->note }}</td>
-                    <td>{{ $req->request_date }}</td>
-                    <td><a href="{{ route('request.detail', ['id' => $req->id]) }}">詳細</a></td>
+                    <td class="table-row__status">承認待ち</td>
+                    <td class="table-row__cell">{{ $req->attendance->user->name }}</td>
+                    <td class="table-row__cell">{{ \Carbon\Carbon::parse($req->target_date)->format('Y/m/d') }}</td>
+                    <td class="table-row__cell">{{ $req->note }}</td>
+                    <td class="table-row__cell">{{ \Carbon\Carbon::parse($req->request_date)->format('Y/m/d') }}</td>
+                    <td class="table-row__cell"><a href="{{ route('attendance.detail', ['id' => $req->attendance->id]) }}">詳細</a></td>
                 </tr>
                 @endforeach
             </table>
@@ -55,22 +55,22 @@
         @if ($currentPage == 'approve')
         <article class="tab-content active" id="content_2">
             <table class="request-table">
-                <tr class="request-table-row">
-                    <td class="request-table__label--status">状態</td>
-                    <td class="request-table__label">名前</td>
-                    <td class="request-table__label">対象日時</td>
-                    <td class="request-table__label">申請理由</td>
-                    <td class="request-table__label">申請日時</td>
-                    <td class="request-table__label">詳細</td>
+                <tr class="request-table-header">
+                    <td class="table-row__status">状態</td>
+                    <td class="table-row__label">名前</td>
+                    <td class="table-row__label">対象日時</td>
+                    <td class="table-row__label">申請理由</td>
+                    <td class="table-row__label">申請日時</td>
+                    <td class="table-row__label">詳細</td>
                 </tr>
                 @foreach ($requests as $req)
                 <tr class="request-table-row">
-                    <td>承認済み</td>
-                    <td>{{ $req->attendance->user->name }}</td>
-                    <td>{{ $req->target_date }}</td>
-                    <td>{{ $req->note }}</td>
-                    <td>{{ $req->request_date }}</td>
-                    <td><a href="{{ route('request.detail', ['id' => $req->id]) }}">詳細</a></td>
+                    <td class="table-row__status">承認済み</td>
+                    <td class="table-row__cell">{{ $req->attendance->user->name }}</td>
+                    <td class="table-row__cell">{{ \Carbon\Carbon::parse($req->target_date)->format('Y/m/d') }}</td>
+                    <td class="table-row__cell">{{ $req->note }}</td>
+                    <td class="table-row__cell">{{ \Carbon\Carbon::parse($req->request_date)->format('Y/m/d') }}</td>
+                    <td class="table-row__cell"><a href="{{ route('attendance.detail', ['id' => $req->attendance->id]) }}">詳細</a></td>
                 </tr>
                 @endforeach
             </table>

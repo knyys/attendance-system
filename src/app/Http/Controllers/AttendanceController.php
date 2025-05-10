@@ -20,7 +20,7 @@ class AttendanceController extends Controller
     public function create(Request $request)
     {
         $now = Carbon::now();
-        $now_day = $now->format('Y年n月d日');
+        $now_day = $now->format('Y年n月j日');
         $dayName = $now->shortDayName;
         $now_time = $now->format('H:i');
 
@@ -98,11 +98,18 @@ class AttendanceController extends Controller
                 break;
 
             case 'start_break':
-                BreakTime::create([
-                    'user_id' => $userId,
-                    'date' => $today,
-                    'start_time' => $now,
-                ]);
+                $attendance = Attendance::where('user_id', $userId)
+                    ->where('date', $today)
+                    ->first();
+
+                if ($attendance) {
+                    BreakTime::create([
+                        'user_id' => $userId,
+                        'attendance_id' => $attendance->id,
+                        'date' => $today,
+                        'start_time' => $now,
+                    ]);
+                }
                 $message = '';
                 break;
 
@@ -209,23 +216,33 @@ class AttendanceController extends Controller
     public function attendanceDetail($id)
     {
         $attendance = Attendance::findOrFail($id);
+        $correctRequest = CorrectRequest::where('attendance_id', $id)->latest()->first();
+        $breakTimeRequests = collect();
         $breakTimes = BreakTime::where('attendance_id', $id)->get();
-        $isRequested = CorrectRequest::where('attendance_id', $id)->exists();
-       
-        $correctRequest = null;
-        $breakTimeRequests = collect(); // 空のコレクションを用意
 
-        if ($isRequested) {
-            $correctRequest = CorrectRequest::where('attendance_id', $id)->first();
-            $breakTimeRequests = BreakTimeRequest::where('correct_request_id', $correctRequest->id)->get();
+        if ($correctRequest) {
+            // 「承認待ち」→CorrectRequest
+            if (in_array($correctRequest->status, [0])) {
+                $breakTimeRequests = BreakTimeRequest::where('correct_request_id', $correctRequest->id)->get();
+
+                return view('user.attendance_detail', [
+                    'data' => $attendance,
+                    'correctRequest' => $correctRequest,
+                    'breakTimeRequests' => $breakTimeRequests,
+                    'isEditable' => false,
+                    'showSource' => true,
+                ]);
+            }
         }
 
+        // 修正申請がない or 承認済み → Attendance
         return view('user.attendance_detail', [
-            'data' => $attendance, 
-            'breakTimes' => $breakTimes, 
-            'isRequested' => $isRequested, 
-            'correctRequest' => $correctRequest, 
-            'breakTimeRequests' => $breakTimeRequests
+            'data' => $attendance,
+            'breakTimes' => $breakTimes,
+            'correctRequest' => null,
+            'breakTimeRequests' => collect(),
+            'isEditable' => true,
+            'showSource' => false,
         ]);
     }
 
@@ -234,7 +251,6 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::findOrFail($id);
 
-        // 勤怠修正申請の保存
         $correctRequest = CorrectRequest::create([
             'user_id' => auth()->id(),
             'attendance_id' => $attendance->id,
@@ -246,9 +262,8 @@ class AttendanceController extends Controller
             'request_date' => now(),
         ]);
 
-        $totalBreakSeconds = 0; // 合計の休憩時間（秒）
+        $totalBreakSeconds = 0;
 
-        // 休憩時間の保存（複数対応）
         if (
             $request->has('break_start_time') &&
             $request->has('break_end_time') &&
@@ -290,13 +305,14 @@ class AttendanceController extends Controller
     //管理者用勤怠詳細ページ
     public function adminAttendanceDetail(Request $request)
     {
-        
+        return view('admin.attendance_datail');
     }
 
     //管理者用勤怠詳細処理
     public function editAdminAttendanceDetail(Request $request)
     {
-        
+    
     }
 
+    
 }

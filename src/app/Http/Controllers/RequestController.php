@@ -10,26 +10,50 @@ use Carbon\Carbon;
 
 class RequestController extends Controller
 {
-    //一般ユーザー用申請一覧
+    //一般ユーザー用申請一覧,
+    //管理者用申請一覧
     public function showRequestList(Request $request)
     {
         $user = auth()->user();
-        $year = $request->query('year', now()->year);
-        $month = $request->query('month', now()->month);
-        $date = Carbon::createFromDate($year, $month, 1)->startOfMonth();
 
-        $page = $request->query('page', 'request');
+    // クエリパラメータ 'page' が無ければ 'request' 扱い
+    $page = $request->query('page', 'request');
 
+    // 管理者の場合
+    if ($user->role === 'admin') {
         $requests = CorrectRequest::with('attendance.user')
-            ->whereHas('attendance', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
             ->where('status', $page === 'request' ? 0 : 1)
-            ->whereYear('target_date', $date->year)
-            ->whereMonth('target_date', $date->month)
             ->orderBy('target_date', 'asc')
             ->get();
-            
-        return view('user.request_list', compact('requests', 'year', 'month'));
+
+        return view('admin.request_list', compact('requests'));
     }
+
+    // 一般ユーザーの場合
+    $requests = CorrectRequest::with('attendance.user')
+        ->whereHas('attendance', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })
+        ->where('status', $page === 'request' ? 0 : 1)
+        ->orderBy('target_date', 'asc')
+        ->get();
+
+    return view('user.request_list', compact('requests'));
+    }
+
+    
+
+    //管理者用申請画面
+    public function showApproveForm()
+    {
+
+    }
+
+    //管理者用申請承認
+    public function approveRequest()
+    {
+        
+    }
+
+
 }
