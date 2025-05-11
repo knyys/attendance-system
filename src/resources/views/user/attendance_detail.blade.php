@@ -1,5 +1,5 @@
 <!--勤怠詳細画面（一般ユーザー）-->
-@extends('layouts.app')
+@extends('layouts.user_header')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/user_attendance_detail.css') }}">
@@ -62,16 +62,18 @@
                                 <input class="attendance-detail__input" type="text" name="break_end_time[]" value="{{ old("break_end_time.$index", \Carbon\Carbon::parse($breakTime->end_time)->format('H:i')) }}">
                             </div>
                             <div class="form__error">
-                                @error("break_start_time.$index")
-                                    <div>{{ $message }}</div>
-                                @enderror
-                                @error("break_end_time.$index")
-                                    <div>{{ $message }}</div>
-                                @enderror
-                            </div>
+    @if ($errors->has("break_times.{$index}"))
+        <div>{{ $errors->first("break_times.{$index}") }}</div>
+    @elseif ($errors->has("break_start_time.{$index}"))
+        <div>{{ $errors->first("break_start_time.{$index}") }}</div>
+    @elseif ($errors->has("break_end_time.{$index}"))
+        <div>{{ $errors->first("break_end_time.{$index}") }}</div>
+    @endif
+</div>
                         </td>
                     </tr>
                     @endforeach
+
                     <tr class="attendance-detail__row">
                         <td class="attendance-detail__label">
                             {{ $breakTimes->count() === 0 ? '休憩' : '休憩' . ($breakTimes->count() + 1) }}
@@ -83,8 +85,13 @@
                                 <input class="attendance-detail__input" type="text" name="break_end_time[]" value="{{ old('break_end_time.' . $breakTimes->count()) }}">
                             </div>
                             <div class="form__error">
-                                @error("break_start_time." . $breakTimes->count())<div>{{ $message }}</div>@enderror
-                                @error("break_end_time." . $breakTimes->count())<div>{{ $message }}</div>@enderror
+                            @if ($errors->has("break_times.{$breakTimes->count()}"))
+                                    <div>{{ $message }}</div>
+                                    @elseif ($errors->has("break_start_time.{$breakTimes->count()}"))
+                                    <div>{{ $message }}</div>
+                                    @elseif ($errors->has("break_end_time.{$breakTimes->count()}"))
+                                    <div>{{ $message }}</div>
+                                @endif
                             </div>
                         </td>
                     </tr>
@@ -98,12 +105,13 @@
                                 <input class="attendance-detail__input" type="text" name="break_end_time[]" value="{{ old('break_end_time.' . $breakTimes->count()) }}">
                             </div>
                             <div class="form__error">
-                                @error("break_start_time.0")
-                                    <div>{{ $message }}</div>
-                                @enderror
-                                @error("break_end_time.0")
-                                    <div>{{ $message }}</div>
-                                @enderror
+                            @if ($errors->has("break_time.0"))
+                                <div>{{ $message }}</div>
+                                @elseif ($errors->has("break_start_time.0"))
+                                <div>{{ $message }}</div>
+                                @elseif ($errors->has("break_end_time.0"))
+                                <div>{{ $message }}</div>
+                            @endif
                             </div>
                         </td>
                     </tr>

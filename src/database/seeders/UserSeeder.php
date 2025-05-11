@@ -38,19 +38,6 @@ class UserSeeder extends Seeder
             'is_admin' => 0,
         ]);
 
-        DB::table('users')->insert([
-            'name'      => 'user4',
-            'email'     => 'user4@email.com',
-            'password'  => Hash::make('user4444'),
-            'is_admin' => 0,
-        ]);
-
-        DB::table('users')->insert([
-            'name'      => 'user5',
-            'email'     => 'user5@email.com',
-            'password'  => Hash::make('user5555'),
-            'is_admin' => 0,
-        ]);
 
         /********** 管理者ユーザー **********/
         DB::table('users')->insert([

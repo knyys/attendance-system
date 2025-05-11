@@ -1,8 +1,8 @@
 <!--申請一覧画面（一般ユーザー）-->
-@extends('layouts.app')
+@extends('layouts.user_header')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/user_request_list.css') }}">
+<link rel="stylesheet" href="{{ asset('css/request_list.css') }}">
 @endsection
 
 @section('content')

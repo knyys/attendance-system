@@ -1,4 +1,4 @@
-<!--共通ヘッダー-->
+<!--管理者用共通ヘッダー-->
 <!DOCTYPE html>
 <html lang="ja">
     <head>
@@ -8,7 +8,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>COACHTECH</title>
         <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}" />
-        <link rel="stylesheet" href="{{ asset('css/common.css') }}" />
+        <link rel="stylesheet" href="{{ asset('css/admin_header.css') }}" />
         @yield('css')
     </head>
     <body>
@@ -21,7 +21,6 @@
 
             <div class="header__inner">
                 @if(Auth::check())
-                    @if(Auth::user()->is_admin == 1)
                     <nav class="header__nav">
                         <a class="header__link" href="/admin/attendance/list">勤怠一覧</a>
                         <a class="header__link" href="/admin/staff/list">スタッフ一覧</a>
@@ -32,27 +31,6 @@
                             <button class="header__logout-button" type="submit">ログアウト</button>
                         </form>
                     </nav>
-                    
-                    @elseif(Auth::user()->is_admin == 0)
-                    @php
-                        $attendance = Auth::user()->todayAttendance;
-                        $isClockedOut = $attendance && $attendance->end_time;
-                    @endphp
-                    <nav class="header__nav">
-                        @if($isClockedOut)
-                            <a class="header__link" href="/attendance/list">今月の勤怠一覧</a>
-                            <a class="header__link" href="/stamp_correction_request/list">申請一覧</a>
-                        @else
-                            <a class="header__link" href="/attendance">勤怠</a>
-                            <a class="header__link" href="/attendance/list">勤怠一覧</a>
-                            <a class="header__link" href="/stamp_correction_request/list">申請</a>
-                        @endif
-                        <form class="header__logout-form" action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button class="header__logout-button" type="submit">ログアウト</button>
-                        </form>
-                    </nav>
-                    @endif
                 @endif
             </div>
         </header>
