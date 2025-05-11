@@ -30,7 +30,7 @@ Route::post('/attendance/{id}', [AttendanceController::class, 'editAttendanceDet
 /******* 管理者用 *******/
 Route::prefix('admin')->group(function () {
     Route::get('/login', function () {
-        return view('auth.login'); 
+        return view('auth.admin_login'); 
     });
     Route::post('/login', [LoginController::class, 'adminLogin']);
     Route::post('/logout', [LoginController::class, 'adminLogout'])->name('adminLogout');
@@ -42,12 +42,12 @@ Route::prefix('admin')->group(function () {
 });
 
 
-Route::get('/request/approve/{attendance_correct_request}', [RequestController::class, 'showApproveForm']); //申請承認
+Route::get('/request/approve/{attendance_correct_request}', [RequestController::class, 'showApproveForm'])->name('approve.form'); //申請承認画面
 Route::post('/request/approve/{attendance_correct_request}', [RequestController::class, 'approveRequest'])->name('request.approve'); //申請承認
 
 
 
 
-/****** ミドルウェアで区別 ******/
+/****** ミドルウェアでユーザーか管理者か区別 ******/
 Route::middleware(['auth'])->get('/stamp_correction_request/list', [RequestController::class, 'showRequestList'])
     ->name('request.list'); //申請一覧

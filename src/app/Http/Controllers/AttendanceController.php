@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AttendanceRequest;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Attendance;
 use App\Models\BreakTime;
 use App\Models\BreakTimeRequest;
@@ -16,6 +16,8 @@ use App\Models\CorrectRequest;
 
 class AttendanceController extends Controller
 {
+    /***********  一般ユーザー用 ***********/
+    
     //一般ユーザー用出勤登録ページ
     public function create(Request $request)
     {
@@ -156,29 +158,38 @@ class AttendanceController extends Controller
         $date = Carbon::createFromDate($year, $month, 1)->startOfMonth();
         $prev = $date->copy()->subMonth();
         $next = $date->copy()->addMonth();
+        $daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
 
+        // 勤怠データ
         $attendances = Attendance::where('user_id', $user->id)
             ->whereYear('date', $date->year)
             ->whereMonth('date', $date->month)
-            ->whereNotNull('end_time')
-            ->orderBy('date', 'asc')
-            ->get();
+            ->get()
+            ->keyBy('date');
 
+        // 休憩データ
         $breakTimes = BreakTime::where('user_id', $user->id)
             ->whereYear('date', $date->year)
             ->whereMonth('date', $date->month)
             ->get()
             ->groupBy('date');
 
-        $daysOfWeek = ['日', '月', '火', '水', '木', '金', '土'];
+        $daysInMonth = $date->daysInMonth;
+        $attendanceList = [];
 
-        foreach ($attendances as $attendance) {
-            $breakTimesForDay = $breakTimes->get($attendance->date);
+        for ($i = 1; $i <= $daysInMonth; $i++) {
+            $currentDate = Carbon::createFromDate($year, $month, $i);
+            $attendance = $attendances->get($currentDate->toDateString());
 
+            $start_time = $attendance?->start_time ? Carbon::parse($attendance->start_time)->format('H:i') : '';
+            $end_time = $attendance?->end_time ? Carbon::parse($attendance->end_time)->format('H:i') : '';
+            $work_time = $attendance?->work_time ? Carbon::parse($attendance->work_time)->format('H:i') : '';
+            $id = $attendance?->id ?? null;
+
+            // 休憩時間を計算
             $totalBreakTime = '';
-
-            if ($breakTimesForDay) {
-                $totalBreakSeconds = $breakTimesForDay->reduce(function ($carry, $break) {
+            if ($breakTimes->has($currentDate->toDateString())) {
+                $totalBreakSeconds = $breakTimes[$currentDate->toDateString()]->reduce(function ($carry, $break) {
                     $start = Carbon::parse($break->start_time);
                     $end = Carbon::parse($break->end_time);
                     return $carry + $end->diffInSeconds($start);
@@ -186,31 +197,24 @@ class AttendanceController extends Controller
                 $totalBreakTime = gmdate('H:i', $totalBreakSeconds);
             }
 
-            $attendance->total_break_time = $totalBreakTime;
-
-            if (!empty($attendance->start_time)) {
-                $attendance->start_time = Carbon::parse($attendance->start_time)->format('H:i');
-            }
-            if (!empty($attendance->end_time)) {
-                $attendance->end_time = Carbon::parse($attendance->end_time)->format('H:i');
-            }
-            if (!empty($attendance->work_time)) {
-                $attendance->work_time = Carbon::parse($attendance->work_time)->format('H:i');
-            }
-
-            // 日付を 'mm/dd（曜日）' 形式に変換
-            $formattedDate = Carbon::parse($attendance->date)->format('m/d');
-            $weekday = $daysOfWeek[Carbon::parse($attendance->date)->dayOfWeek];
-            $attendance->formatted_date = "{$formattedDate}（{$weekday}）";
+            $attendanceList[] = [
+                'formatted_date' => $currentDate->format('m/d') . '（' . $daysOfWeek[$currentDate->dayOfWeek] . '）',
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+                'total_break_time' => $totalBreakTime,
+                'work_time' => $work_time,
+                'id' => $id,
+            ];
         }
 
         return view('user.attendance_list', [
-            'attendances' => $attendances,
+            'attendances' => $attendanceList,
             'current' => $date,
             'prev' => $prev,
             'next' => $next,
         ]);
     }
+
 
     //一般ユーザー用勤怠詳細ページ
     public function attendanceDetail($id)
@@ -296,16 +300,95 @@ class AttendanceController extends Controller
 
 
 
+    /***********  管理者用 ***********/
+
     //管理者用勤怠一覧ページ
-    public function showAdminAttendanceList()
-    {
-        return view('admin.attendance_list');
+    public function showAdminAttendanceList(Request $request)
+    {        
+        Carbon::setLocale('ja');
+
+        $year = $request->query('year', now()->year);
+        $month = $request->query('month', now()->month);
+        $day = $request->query('day', now()->day);
+
+        $date = Carbon::createFromDate($year, $month, $day);
+        $prev = $date->copy()->subDay(); 
+        $next = $date->copy()->addDay(); 
+
+        $users = User::all();
+        $attendanceList = [];
+
+        foreach($users as $user) {
+            if (!$user) continue; 
+            $attendances = Attendance::where('user_id', $user->id)
+                ->whereDate('date', $date)
+                ->first();
+            $breakTimes = BreakTime::where('user_id', $user->id)
+            ->whereDate('date', $date)
+            ->get();
+
+            if (!$attendances && $breakTimes->isEmpty()) {
+                continue; // どちらもなければスキップ
+            }
+
+            $start_time = $attendances?->start_time ? Carbon::parse($attendances->start_time)->format('H:i') : '';
+            $end_time = $attendances?->end_time ? Carbon::parse($attendances->end_time)->format('H:i') : '';
+            $work_time = $attendances?->work_time ? Carbon::parse($attendances->work_time)->format('H:i') : '';
+            $id = $attendance?->id ?? null;
+
+            $totalBreakTime = '';
+            if ($breakTimes->isNotEmpty()) {
+                $totalBreakSeconds = $breakTimes->reduce(function ($carry, $break) {
+                    $start = Carbon::parse($break->start_time);
+                    $end = Carbon::parse($break->end_time);
+                    return $carry + $end->diffInSeconds($start);
+                }, 0);
+                $totalBreakTime = gmdate('H:i', $totalBreakSeconds);
+            }
+
+            $attendanceList[] = [
+                'name' => $user->name,
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+                'total_break_time' => $totalBreakTime,
+                'work_time' => $work_time,
+                'id' =>  $attendances ? $attendances->id : null,
+            ];
+        }
+
+        return view('admin.attendance_list', [
+            'attendances' => $attendanceList,
+            'current' => $date,
+            'prev' => $prev,
+            'next' => $next,
+            'users' => $users,
+        ]);
     }
+    
 
     //管理者用勤怠詳細ページ
-    public function adminAttendanceDetail(Request $request)
+    public function adminAttendanceDetail($id)
     {
-        return view('admin.attendance_datail');
+        $attendance = Attendance::findOrFail($id);
+        $correctRequest = CorrectRequest::where('attendance_id', $id)->latest()->first();
+        $breakTimeRequests = collect();
+        $breakTimes = BreakTime::where('attendance_id', $id)->get();
+
+        if ($correctRequest) {
+            // 「承認待ち」→CorrectRequest
+            if (in_array($correctRequest->status, [0])) {
+                $breakTimeRequests = BreakTimeRequest::where('correct_request_id', $correctRequest->id)->get();
+
+                return view('admin.attendance_datail', [
+                    'data' => $attendance,
+                    'correctRequest' => $correctRequest,
+                    'breakTimeRequests' => $breakTimeRequests,
+                    'isEditable' => false,
+                    'showSource' => true,
+                ]);
+            }
+        }
+
     }
 
     //管理者用勤怠詳細処理

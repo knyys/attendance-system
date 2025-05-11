@@ -10,17 +10,17 @@ body{
 }
 
 .header__logo{
-    width: 70%;
+    width: 65%;
     padding: 10px 15px;
 }
 
 .header__logo img{
     height: 40px;
-    width: 35%;
+    width: 30%;
 }
 
 .header__inner{
-    width: 30%;
+    width: 35%;
     justify-content: end;
 }
 

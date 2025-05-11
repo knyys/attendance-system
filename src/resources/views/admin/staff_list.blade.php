@@ -1,5 +1,5 @@
 <!--スタッフ一覧画面（管理者）-->
-@extends('layouts.app')
+@extends('layouts.admin_header')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/user_attendance_detail.css') }}">

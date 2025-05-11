@@ -15,30 +15,23 @@ class RequestController extends Controller
     public function showRequestList(Request $request)
     {
         $user = auth()->user();
-
-    // クエリパラメータ 'page' が無ければ 'request' 扱い
-    $page = $request->query('page', 'request');
-
-    // 管理者の場合
-    if ($user->role === 'admin') {
+        $page = $request->query('page', 'request');
+    
+        $isAdmin = $user->is_admin == 1;
+    
         $requests = CorrectRequest::with('attendance.user')
+            ->when(!$isAdmin, function ($query) use ($user) {
+                return $query->whereHas('attendance', function ($q) use ($user) {
+                    $q->where('user_id', $user->id);
+                });
+            })
             ->where('status', $page === 'request' ? 0 : 1)
             ->orderBy('target_date', 'asc')
             ->get();
-
-        return view('admin.request_list', compact('requests'));
-    }
-
-    // 一般ユーザーの場合
-    $requests = CorrectRequest::with('attendance.user')
-        ->whereHas('attendance', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        })
-        ->where('status', $page === 'request' ? 0 : 1)
-        ->orderBy('target_date', 'asc')
-        ->get();
-
-    return view('user.request_list', compact('requests'));
+    
+        $view = $isAdmin ? 'admin.request_list' : 'user.request_list';
+        return view($view, compact('requests'));
+    
     }
 
     
