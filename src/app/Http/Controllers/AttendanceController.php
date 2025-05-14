@@ -369,27 +369,10 @@ class AttendanceController extends Controller
     //管理者用勤怠詳細ページ
     public function adminAttendanceDetail($id)
     {
-        $attendance = Attendance::findOrFail($id);
-        $correctRequest = CorrectRequest::where('attendance_id', $id)->latest()->first();
-        $breakTimeRequests = collect();
-        $breakTimes = BreakTime::where('attendance_id', $id)->get();
-
-        if ($correctRequest) {
-            // 「承認待ち」→CorrectRequest
-            if (in_array($correctRequest->status, [0])) {
-                $breakTimeRequests = BreakTimeRequest::where('correct_request_id', $correctRequest->id)->get();
-
-                return view('admin.attendance_datail', [
-                    'data' => $attendance,
-                    'correctRequest' => $correctRequest,
-                    'breakTimeRequests' => $breakTimeRequests,
-                    'isEditable' => false,
-                    'showSource' => true,
-                ]);
-            }
+                return view('admin.attendance_detail');
         }
 
-    }
+    
 
     //管理者用勤怠詳細処理
     public function editAdminAttendanceDetail(Request $request)

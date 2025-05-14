@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\CorrectRequest;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Attendance;
+use App\Models\BreakTime;
+use App\Models\BreakTimeRequest;
+use App\Models\CorrectRequest;
 
 class RequestController extends Controller
 {
@@ -37,15 +40,64 @@ class RequestController extends Controller
     
 
     //管理者用申請画面
-    public function showApproveForm()
+    public function showApproveForm($attendance_correct_request)
     {
+        $correctRequest = CorrectRequest::findOrFail($attendance_correct_request);
+        $correctRequest->load('attendance.user'); 
 
-    }
+        $breakTimeRequests = BreakTimeRequest::where('correct_request_id', $correctRequest->id)->get();
+
+        return view('admin.approve_form', [
+            'correctRequest' => $correctRequest,
+            'breakTimeRequests' => $breakTimeRequests,
+        ]);
+    }    
+    
+
 
     //管理者用申請承認
-    public function approveRequest()
+
+    public function approveRequest(Request $request, $attendance_correct_request)
     {
-        
+        $correctRequest = CorrectRequest::findOrFail($attendance_correct_request);
+        $attendance = $correctRequest->attendance;
+        $breakTimeRequests = BreakTimeRequest::where('correct_request_id', $correctRequest->id)->get();
+        $date = $attendance->date;
+
+        // 休憩時間合計
+        $totalBreakSeconds = $breakTimeRequests->sum(function ($break) {
+            $start = strtotime($break->start_time);
+            $end = strtotime($break->end_time);
+            return $end - $start;
+        });
+
+        $startTime = strtotime($correctRequest->start_time);
+        $endTime = strtotime($correctRequest->end_time);
+        $workTimes = $endTime - $startTime - $totalBreakSeconds;
+
+        $attendance->update([
+            'start_time' => Carbon::parse($date . ' ' . $request->input('start_time')),
+            'end_time' => Carbon::parse($date . ' ' . $request->input('end_time')),
+            'work_time' => gmdate('H:i:s', $workTimes),
+        ]);
+
+        foreach ($breakTimeRequests as $breakTimeRequest) {
+            $breakTime = BreakTime::find($breakTimeRequest->break_time_id);
+
+            if ($breakTime) {
+                $breakTime->update([
+                    'start_time' => $breakTimeRequest->start_time,
+                    'end_time' => $breakTimeRequest->end_time,
+                    'total_break_time' => $breakTimeRequest->total_break_time,
+                ]);
+            }
+        }
+
+        $correctRequest->update([
+            'status' => 1,
+        ]);
+
+        return redirect()->route('approve.form', ['attendance_correct_request' => $correctRequest->id]);
     }
 
 

@@ -43,8 +43,7 @@ Route::prefix('admin')->group(function () {
 
 
 Route::get('/request/approve/{attendance_correct_request}', [RequestController::class, 'showApproveForm'])->name('approve.form'); //申請承認画面
-Route::post('/request/approve/{attendance_correct_request}', [RequestController::class, 'approveRequest'])->name('request.approve'); //申請承認
-
+Route::patch('/request/approve/{attendance_correct_request}', [RequestController::class, 'approveRequest'])->name('request.approve'); //申請承認
 
 
 
