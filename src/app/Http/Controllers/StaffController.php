@@ -13,9 +13,14 @@ class StaffController extends Controller
 
 
     //スタッフ一覧ページ
-    public function showStaffList(Request $request)
+    public function showStaffList()
     {
-        return view('admin.staff_list');
+        //全スタッフ情報を取得
+        $staffs = User::where('is_admin', 0)->get();
+
+        //スタッフ情報をビューに渡す
+        return view('admin.staff_list', ['staffs' => $staffs]);
+
     }
 
     //スタッフ別勤怠一覧ページ

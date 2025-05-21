@@ -15,7 +15,6 @@
         <!-- 修正フォーム表示 -->
         <form action="{{ route('request.approve', ['attendance_correct_request' => $correctRequest->id]) }}" method="post" >
             @csrf
-            @method('PATCH')
             <table class="approve-form__table">
             <tr class="approve-form__row">
                 <td class="approve-form__label">名前</td>
@@ -40,7 +39,7 @@
                         <p>~</p>
                         <p>{{ \Carbon\Carbon::parse($correctRequest->end_time)->format('H:i') }}</p>
                         <input type="hidden" name="start_time" value="{{ \Carbon\Carbon::parse($correctRequest->start_time)->format('H:i') }}">
-<input type="hidden" name="end_time" value="{{ \Carbon\Carbon::parse($correctRequest->end_time)->format('H:i') }}">
+                        <input type="hidden" name="end_time" value="{{ \Carbon\Carbon::parse($correctRequest->end_time)->format('H:i') }}">
 
                     </div>
                 </td>
@@ -57,7 +56,7 @@
                             <p>~</p>
                             <p>{{ \Carbon\Carbon::parse($breakTimeRequest->end_time)->format('H:i') }}</p>
                             <input type="hidden" name="break_start_time[{{ $index }}]" value="{{ \Carbon\Carbon::parse($breakTimeRequest->start_time)->format('H:i') }}">
-            <input type="hidden" name="break_end_time[{{ $index }}]" value="{{ \Carbon\Carbon::parse($breakTimeRequest->end_time)->format('H:i') }}">
+                            <input type="hidden" name="break_end_time[{{ $index }}]" value="{{ \Carbon\Carbon::parse($breakTimeRequest->end_time)->format('H:i') }}">
                         </div>
                     </td>
                 </tr>
