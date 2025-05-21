@@ -1,0 +1,54 @@
+body {
+    background-color: rgb(231, 231, 231);
+}
+
+.content {
+    position: relative;
+    height: auto;
+    width: 100%;
+    max-width: 100vw;
+}
+
+.content h2 {
+    border-left: solid 10px black;
+    padding: 0 0 0 30px;
+    align-items: flex-start;
+    position: absolute;
+    top: 50px;
+    left: 23%;
+    font-size: 30px;
+    margin: 0;
+}
+
+.staff-list{
+    position: absolute;
+    top: 200px;
+    left: 23%;
+    width: 77%;
+}
+
+.staff-list-table{
+    width: 75%;
+    border-collapse: collapse;
+    font-size: 20px;
+    color: rgb(99, 98, 98);
+    background-color: white;
+    border-radius: 10px;
+}
+
+.staff-list-table-header,
+.staff-list-table-row{
+    grid-template-columns: repeat(3, 1fr);
+    display: grid;
+    border-bottom: 2px solid rgb(182, 180, 180);
+    align-items: center;
+    justify-items: center;
+    padding: 10px 180px;
+}
+
+.staff-list-table-detail{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+}

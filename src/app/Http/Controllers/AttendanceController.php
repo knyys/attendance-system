@@ -217,18 +217,19 @@ class AttendanceController extends Controller
 
 
     //一般ユーザー用勤怠詳細ページ
-    public function attendanceDetail($id)
+    public function attendanceDetail(Request $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
         $correctRequest = CorrectRequest::where('attendance_id', $id)->latest()->first();
         $breakTimeRequests = collect();
         $breakTimes = BreakTime::where('attendance_id', $id)->get();
 
-        if ($correctRequest) {
-            // 「承認待ち」→CorrectRequest
-            if (in_array($correctRequest->status, [0])) {
-                $breakTimeRequests = BreakTimeRequest::where('correct_request_id', $correctRequest->id)->get();
+        $from = $request->query('from', 'attendance'); 
 
+        if ($from === 'request') {
+            if ($correctRequest) {
+                $breakTimeRequests = BreakTimeRequest::where('correct_request_id', $correctRequest->id)->get();
+    
                 return view('user.attendance_detail', [
                     'data' => $attendance,
                     'correctRequest' => $correctRequest,
@@ -239,7 +240,22 @@ class AttendanceController extends Controller
             }
         }
 
-        // 修正申請がない or 承認済み → Attendance
+        // 修正申請がない → Attendance
+        if ($correctRequest) {
+            if ($correctRequest && in_array($correctRequest->status, [0])){
+            $breakTimeRequests = BreakTimeRequest::where('correct_request_id', $correctRequest->id)->get();
+    
+            return view('user.attendance_detail', [
+                'data' => $attendance,
+                'correctRequest' => $correctRequest,
+                'breakTimeRequests' => $breakTimeRequests,
+                'isEditable' => false, // 申請があるので編集不可
+                'showSource' => false,
+            ]);
+        }
+    }
+    
+        // 修正申請がない場合のみ編集可能
         return view('user.attendance_detail', [
             'data' => $attendance,
             'breakTimes' => $breakTimes,
@@ -248,6 +264,7 @@ class AttendanceController extends Controller
             'isEditable' => true,
             'showSource' => false,
         ]);
+    
     }
 
     //一般ユーザー用勤怠詳細処理(修正申請)
@@ -369,16 +386,97 @@ class AttendanceController extends Controller
     //管理者用勤怠詳細ページ
     public function adminAttendanceDetail($id)
     {
-                return view('admin.attendance_detail');
+        $attendance = Attendance::findOrFail($id);
+        $correctRequest = CorrectRequest::where('attendance_id', $id)->latest()->first();
+        $breakTimeRequests = collect();
+        $breakTimes = BreakTime::where('attendance_id', $id)->get();
+
+        if ($correctRequest) {
+            // 「承認待ち」→CorrectRequest
+            if (in_array($correctRequest->status, [0])) {
+                $breakTimeRequests = BreakTimeRequest::where('correct_request_id', $correctRequest->id)->get();
+
+                return view('admin.attendance_detail', [
+                    'data' => $attendance,
+                    'correctRequest' => $correctRequest,
+                    'breakTimeRequests' => $breakTimeRequests,
+                    'isEditable' => false,
+                    'showSource' => true,
+                ]);
+            }
         }
+
+        // 修正申請がない or 承認済み → Attendance
+        return view('admin.attendance_detail', [
+            'data' => $attendance,
+            'breakTimes' => $breakTimes,
+            'correctRequest' => null,
+            'breakTimeRequests' => collect(),
+            'isEditable' => true,
+            'showSource' => false,
+        ]);
+    } 
 
     
 
     //管理者用勤怠詳細処理
-    public function editAdminAttendanceDetail(Request $request)
+    public function editAdminAttendanceDetail(AttendanceRequest $request, $id)
     {
-    
+        $attendance = Attendance::findOrFail($id);
+        $attendance->update([
+            'start_time' => $request->input('start_time'),
+            'end_time' => $request->input('end_time'),
+            'work_time' => gmdate('H:i:s', strtotime($request->input('end_time')) - strtotime($request->input('start_time'))),
+        ]);
+
+        $totalBreakSeconds = 0;
+
+        if (
+            $request->has('break_start_time') &&
+            $request->has('break_end_time') &&
+            $request->has('break_time_id')
+        ) {
+            $startTimes = $request->input('break_start_time');
+            $endTimes = $request->input('break_end_time');
+            $breakTimeIds = $request->input('break_time_id');
+
+            for ($i = 0; $i < count($startTimes); $i++) {
+                if ($startTimes[$i] && $endTimes[$i]) {
+                    $start = strtotime($startTimes[$i]);
+                    $end = strtotime($endTimes[$i]);
+                    $breakDuration = $end - $start;
+                    $totalBreakSeconds += $breakDuration;
+
+                    if (!empty($breakTimeIds[$i])) {
+                        // 既存データの更新
+                        $breakTime = BreakTime::find($breakTimeIds[$i]);
+                        if ($breakTime) {
+                            $breakTime->update([
+                                'start_time' => $startTimes[$i],
+                                'end_time' => $endTimes[$i],
+                                'total_break_time' => gmdate('H:i', $breakDuration),
+                            ]);
+                        }
+                    } else {
+                        // 新規作成
+                        BreakTime::create([
+                            'user_id' => $attendance->user_id,
+                            'attendance_id' => $attendance->id,
+                            'date' => $attendance->date,
+                            'start_time' => $startTimes[$i],
+                            'end_time' => $endTimes[$i],
+                            'total_break_time' => gmdate('H:i', $breakDuration),
+                        ]);
+                }
+            }
+        }
+        
+       return redirect()->route('admin.attendance.detail', ['id' => $attendance->id])->with('message', '勤怠情報を更新しました。');
     }
 
     
+    
+
+    
+}
 }

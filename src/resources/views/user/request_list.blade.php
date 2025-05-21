@@ -45,7 +45,7 @@
                     <td class="table-row__cell">{{ \Carbon\Carbon::parse($req->target_date)->format('Y/m/d') }}</td>
                     <td class="table-row__cell">{{ $req->note }}</td>
                     <td class="table-row__cell">{{ \Carbon\Carbon::parse($req->request_date)->format('Y/m/d') }}</td>
-                    <td class="table-row__cell"><a href="{{ route('attendance.detail', ['id' => $req->attendance->id]) }}">詳細</a></td>
+                    <td class="table-row__cell"><a href="{{ route('attendance.detail', ['id' => $req->attendance->id, 'from' => 'request']) }}">詳細</a></td>
                 </tr>
                 @endforeach
             </table>
@@ -70,7 +70,7 @@
                     <td class="table-row__cell">{{ \Carbon\Carbon::parse($req->target_date)->format('Y/m/d') }}</td>
                     <td class="table-row__cell">{{ $req->note }}</td>
                     <td class="table-row__cell">{{ \Carbon\Carbon::parse($req->request_date)->format('Y/m/d') }}</td>
-                    <td class="table-row__cell"><a href="{{ route('attendance.detail', ['id' => $req->attendance->id]) }}">詳細</a></td>
+                    <td class="table-row__cell"><a href="{{ route('attendance.detail', ['id' => $req->attendance->id, 'from' => 'request']) }}">詳細</a></td>
                 </tr>
                 @endforeach
             </table>

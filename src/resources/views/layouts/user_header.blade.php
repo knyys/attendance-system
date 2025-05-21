@@ -27,7 +27,7 @@
                     @endphp
                     <nav class="header__nav">
                         @if($isClockedOut)
-                            <a class="header__link" href="/attendance/list">今月の勤怠一覧</a>
+                            <a class="header__link" href="/attendance/list">今月の出勤一覧</a>
                             <a class="header__link" href="/stamp_correction_request/list">申請一覧</a>
                         @else
                             <a class="header__link" href="/attendance">勤怠</a>

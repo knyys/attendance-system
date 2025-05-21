@@ -37,13 +37,14 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/attendance/list', [AttendanceController::class, 'showAdminAttendanceList'])->name('admin.attendance.list'); //一覧
     Route::get('/attendance/{id}', [AttendanceController::class, 'adminAttendanceDetail'])->name('admin.attendance.detail'); //詳細
+    Route::post('/attendance/{id}', [AttendanceController::class, 'editAdminAttendanceDetail'])->name('admin.detail.request'); //修正申請
     Route::get('/staff/list', [StaffController::class, 'showStaffList'])->name('admin.staff.list'); //スタッフ一覧
     Route::get('/attendance/staff/{id}', [StaffController::class, 'staffAttendanceList'])->name('admin.staff.attendance.list'); //スタッフ別勤怠一覧
 });
 
 
 Route::get('/request/approve/{attendance_correct_request}', [RequestController::class, 'showApproveForm'])->name('approve.form'); //申請承認画面
-Route::patch('/request/approve/{attendance_correct_request}', [RequestController::class, 'approveRequest'])->name('request.approve'); //申請承認
+Route::post('/request/approve/{attendance_correct_request}', [RequestController::class, 'approveRequest'])->name('request.approve'); //申請承認
 
 
 

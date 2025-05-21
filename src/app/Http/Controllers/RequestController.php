@@ -56,7 +56,6 @@ class RequestController extends Controller
 
 
     //管理者用申請承認
-
     public function approveRequest(Request $request, $attendance_correct_request)
     {
         $correctRequest = CorrectRequest::findOrFail($attendance_correct_request);
@@ -83,9 +82,20 @@ class RequestController extends Controller
 
         foreach ($breakTimeRequests as $breakTimeRequest) {
             $breakTime = BreakTime::find($breakTimeRequest->break_time_id);
-
+    
             if ($breakTime) {
+                // 既存の BreakTime を上書き
                 $breakTime->update([
+                    'start_time' => $breakTimeRequest->start_time,
+                    'end_time' => $breakTimeRequest->end_time,
+                    'total_break_time' => $breakTimeRequest->total_break_time,
+                ]);
+            } else {
+                // 新規の休憩を BreakTime に追加
+                BreakTime::create([
+                    'user_id' => $attendance->user_id,
+                    'attendance_id' => $attendance->id,
+                    'date' => $date,
                     'start_time' => $breakTimeRequest->start_time,
                     'end_time' => $breakTimeRequest->end_time,
                     'total_break_time' => $breakTimeRequest->total_break_time,

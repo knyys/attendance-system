@@ -1,5 +1,5 @@
 <!--メール認証誘導画面-->
-@extends('layouts.app')
+@extends('layouts.user_header')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/email.css') }}">
