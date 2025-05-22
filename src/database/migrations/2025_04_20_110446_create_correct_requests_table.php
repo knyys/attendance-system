@@ -20,9 +20,9 @@ class CreateCorrectRequestsTable extends Migration
             $table->boolean('status')->default(0);
             $table->date('target_date');
             $table->text('note');
-            $table->date('request_date');
-            $table->time('start_time');
-            $table->time('end_time');
+            $table->date('request_date')->nullable();
+            $table->time('start_time')->nullable();
+            $table->time('end_time')->nullable();
             $table->timestamps();
         });
     }

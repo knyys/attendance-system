@@ -1,0 +1,19 @@
+.attendance-csv-export {
+    text-align: right;
+    width: 75%;
+
+}
+
+.staff-attendance-list-btn {
+    height: 45px;
+    width: 170px;
+    color: white;
+    background-color: black;
+    font-size: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    margin-bottom: 50px;
+
+    
+}
