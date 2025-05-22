@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AttendanceRequest;
-use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Attendance;
@@ -423,11 +422,9 @@ class AttendanceController extends Controller
     public function editAdminAttendanceDetail(AttendanceRequest $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
-        $attendance->update([
-            'start_time' => $request->input('start_time'),
-            'end_time' => $request->input('end_time'),
-            'work_time' => gmdate('H:i:s', strtotime($request->input('end_time')) - strtotime($request->input('start_time'))),
-        ]);
+
+        $startTimestamp = strtotime($request->input('start_time'));
+        $endTimestamp = strtotime($request->input('end_time'));
 
         $totalBreakSeconds = 0;
 
@@ -448,7 +445,6 @@ class AttendanceController extends Controller
                     $totalBreakSeconds += $breakDuration;
 
                     if (!empty($breakTimeIds[$i])) {
-                        // 既存データの更新
                         $breakTime = BreakTime::find($breakTimeIds[$i]);
                         if ($breakTime) {
                             $breakTime->update([
@@ -458,7 +454,6 @@ class AttendanceController extends Controller
                             ]);
                         }
                     } else {
-                        // 新規作成
                         BreakTime::create([
                             'user_id' => $attendance->user_id,
                             'attendance_id' => $attendance->id,
@@ -467,9 +462,22 @@ class AttendanceController extends Controller
                             'end_time' => $endTimes[$i],
                             'total_break_time' => gmdate('H:i', $breakDuration),
                         ]);
+                    }
                 }
             }
         }
+
+        // 勤務時間を算出（総時間 - 休憩時間）
+        $workSeconds = $endTimestamp - $startTimestamp - $totalBreakSeconds;
+        $workSeconds = max($workSeconds, 0); // マイナスにならないように
+
+        // 更新処理
+        $attendance->update([
+            'start_time' => $request->input('start_time'),
+            'end_time' => $request->input('end_time'),
+            'work_time' => gmdate('H:i:s', $workSeconds),
+        ]);
+
         
        return redirect()->route('admin.attendance.detail', ['id' => $attendance->id])->with('message', '勤怠情報を更新しました。');
     }
@@ -478,5 +486,4 @@ class AttendanceController extends Controller
     
 
     
-}
 }
