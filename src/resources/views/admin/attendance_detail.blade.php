@@ -125,7 +125,7 @@
                     <td class="attendance-detail__label">備考</td>
                     <td class="attendance-detail__value--textarea">
                        <div>
-                            <textarea class="attendance-detail__input-note" name="note" rows="5" cols="30">{{ old('note') }}</textarea>
+                            <textarea class="attendance-detail__input-note" name="note" rows="5" cols="30">{{ old('note', $data->note ?? '')  }}</textarea>
                         </div>                  
                         <div class="form__error">
                             @error('note')

@@ -9,7 +9,12 @@
 
 @section('content')
 <div class="content">
+<form action="{{ route('export.attendances')}}" method="GET">
     <h2>{{ $user->name }}さんの勤怠</h2>
+
+    <input type="hidden" name="user_id" value="{{ $user->id }}">
+    <input type="hidden" name="month" value="{{ $current->format('Y-m') }}">
+    
     <div class="attendance-list-pagenate">  
         <a href="{{ route('admin.staff.attendance.list', ['year' => $prev->year, 'month' => $prev->month, 'id' => $user->id]) }}">← 前月</a>
         <div class="attendance-list-pagenate-current">
@@ -54,15 +59,20 @@
                 <td colspan="6" style="text-align: center;">勤怠データがありません</td>
             </tr>
         @endif
-        </tr>    
-    
-    
+        </tr>       
     </table>
     
     <div class="attendance-csv-export">
-    <button class="staff-attendance-list-btn" type="submit">
-        CSV出力
-    </button>
-</div>
+    @if ($hasAttendanceData)
+        <button class="staff-attendance-list-btn" type="submit">
+            CSV出力
+        </button>
+    @else
+        <button class="staff-attendance-list-btn__disabled" type="button" disabled>
+            CSV出力
+        </button>
+    @endif
+    </div>
+</form>
 </div>
 @endsection

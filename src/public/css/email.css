@@ -1,71 +1,57 @@
-.container {
+.mail_notice--div{
   display: flex;
-  text-align: center;
+  justify-content: center;
   flex-direction: column;
-  align-items: center;
-  position: relative;
-  width: 100%;
+  width: 100vw;
+  margin-top: 10%;
 }
 
-p {
-  position: absolute;
-  top: 60px;
+.notice_header--p{
   font-size: 22px;
+  font-weight: bold;
+  text-align: center;
 }
 
-.auth {
+.mail_notice--content{
+  height: auto;
+}
+
+.notice_resend--p{
+  font-size: 20px;
+  font-weight: bold;
+  justify-content: center;
+  text-align: center;
+  padding: 30px 0;
+}
+
+.mail_resend--p{
+  justify-content: center;
+  text-align: center;
+  padding: 30px 0;
+}
+
+.mail_resend--a{
+  text-decoration: none;
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: lightgrey;
-  margin: 10px 10px;
-  padding: 10px 15px;
-  position: absolute;
-  top: 180px;
-  font-size: 24px;
-  font-weight: bold;
+  padding: 10px 20px;
+  background-color: rgb(233, 228, 228);
+  margin: 40px 0 40px 0;
 }
 
-.auth__retry {
-  display: flex;
+.mail_resend--form{
+  justify-content: center;
   text-align: center;
-  align-items: center;
-  position: absolute;
-  top: 300px;
+  margin: 40px 0;
 }
 
-.auth__retry button {
+.mail_resend--button{
   border: none;
-  font-size: 20px;
-  color: blue;
   background-color: transparent;
-}
-
-/* タブレット用 (768-850px) */
-@media (min-width: 768px) {
-  p {
-    font-size: 20px;
-  }
-
-  .auth {
-    font-size: 22px;
-  }
-
-  .auth__retry button {
-    font-size: 18px;
-  }
-}
-
-/* PC用 (1400-1540px) */
-@media (min-width: 1400px) {
-  p {
-    font-size: 22px;
-  }
-
-  .auth {
-    font-size: 24px;
-  }
-
-  .auth__retry button {
-    font-size: 20px;
-  }
+  color: rgb(8, 174, 245);
+  font-size: 16px;
+  cursor: pointer;
 }
