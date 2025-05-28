@@ -2,8 +2,8 @@
 
 ## 環境構築
 **Dockerビルド**
-1. `git clone git@github.com:knyys/Furima.git`
-2. `cd A`
+1. `git clone git@github.com:knyys/attendance-system.git`
+2. `cd attendance-system`
 3. DockerDesktopアプリを立ち上げる
 4. `docker-compose up -d --build`
 
@@ -12,7 +12,7 @@
 **Laravel環境構築**
 1. `docker-compose exec php bash`
 2. `composer install`
-3. 「.env.example」ファイルを 「.env」ファイルに命名を変更。または、新しく.envファイルを作成
+3. 「.env.example」ファイルをコピーして.envファイルを作成
 4. .envに以下の環境変数を追加
 ``` text
 DB_CONNECTION=mysql
@@ -64,6 +64,20 @@ php artisan storage:link
     アクセスした際に、Permission deniedというエラーが発生した場合は  
   `sudo chmod -R 777 src/*`*
 
+  
+## テストアカウント
+一般ユーザー
+```vim
+name: user
+email: user@email.com
+password: user1111
+ ```
+管理者
+ ```vim
+name: admin
+email: admin@email.com
+password: admin1111
+ ```
 
 ## 使用技術(実行環境)
 - PHP8.2.28
