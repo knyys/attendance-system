@@ -18,6 +18,12 @@ class BreakTime extends Model
         'total_break_time',
     ];
 
+    protected $casts = [
+        'start' => 'datetime',
+        'end' => 'datetime',
+    ];
+
+    
     //リレーション
     public function user()
     {

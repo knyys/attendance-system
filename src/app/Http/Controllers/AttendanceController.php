@@ -427,6 +427,7 @@ class AttendanceController extends Controller
         $endTimestamp = strtotime($request->input('end_time'));
 
         $totalBreakSeconds = 0;
+        $keepBreakTimeIds = [];
 
         if (
             $request->has('break_start_time') &&
@@ -452,9 +453,10 @@ class AttendanceController extends Controller
                                 'end_time' => $endTimes[$i],
                                 'total_break_time' => gmdate('H:i', $breakDuration),
                             ]);
+                            $keepBreakTimeIds[] = $breakTime->id;
                         }
                     } else {
-                        BreakTime::create([
+                        $newBreak = BreakTime::create([
                             'user_id' => $attendance->user_id,
                             'attendance_id' => $attendance->id,
                             'date' => $attendance->date,
@@ -462,24 +464,29 @@ class AttendanceController extends Controller
                             'end_time' => $endTimes[$i],
                             'total_break_time' => gmdate('H:i', $breakDuration),
                         ]);
+                        $keepBreakTimeIds[] = $newBreak->id;
                     }
                 }
             }
         }
 
+        BreakTime::where('attendance_id', $attendance->id)
+            ->whereNotIn('id', $keepBreakTimeIds)
+            ->delete();
+
         // 勤務時間を算出（総時間 - 休憩時間）
         $workSeconds = $endTimestamp - $startTimestamp - $totalBreakSeconds;
-        $workSeconds = max($workSeconds, 0); // マイナスにならないように
+        $workSeconds = max($workSeconds, 0);
 
-        // 更新処理
         $attendance->update([
             'start_time' => $request->input('start_time'),
             'end_time' => $request->input('end_time'),
             'work_time' => gmdate('H:i:s', $workSeconds),
+            'note' => $request->input('note'),
         ]);
 
-        
-       return redirect()->route('admin.attendance.detail', ['id' => $attendance->id])->with('message', '勤怠情報を更新しました。');
+        return redirect()->route('admin.attendance.detail', ['id' => $attendance->id])
+            ->with('message', '勤怠情報を更新しました。');
     }
 
     

@@ -11,8 +11,6 @@
         <h2 class="approve-form__title">
             勤怠詳細
         </h2>
-
-        <!-- 修正フォーム表示 -->
         <form action="{{ route('request.approve', ['attendance_correct_request' => $correctRequest->id]) }}" method="post" >
             @csrf
             <table class="approve-form__table">
@@ -80,6 +78,7 @@
                 <td class="approve-form__value--textarea">
                     <div>
                         <p class="approve-form__note--requested">{{ $correctRequest->note }}</p>
+                        <input type="hidden" name="note" value="{{ $correctRequest->note }}">
                     </div> 
                 </td>
             </tr>

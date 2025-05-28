@@ -12,7 +12,7 @@ use App\Models\Attendance;
 use App\Models\BreakTime;
 
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 

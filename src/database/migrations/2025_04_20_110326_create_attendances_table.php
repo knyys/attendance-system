@@ -20,6 +20,7 @@ class CreateAttendancesTable extends Migration
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
             $table->time('work_time')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
 
             $table->unique(['user_id', 'date']);

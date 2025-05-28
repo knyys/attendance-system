@@ -31,10 +31,15 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $this->passwordRules(),],
         [
             'name.required' => 'お名前を入力してください',
+            'name.string' => '名前は文字で入力してください',
+            'name.max' => '名前は255字以下で入力してください',
             'email.required' => 'メールアドレスを入力してください',
+            'email.string' => 'メールアドレスは文字で入力してください',
             'email.email' => 'メール形式（例：example@example.com）で入力してください',
+            'email.max' => 'メールアドレスは255字以下で入力してください',
             'email.unique' => 'このメールアドレスはすでに登録されています',
             'password.required' => 'パスワードを入力してください',
+            'password.string' => 'パスワードは文字列で入力してください',
             'password.min' => 'パスワードは8文字以上で入力してください',
             'password.confirmed' => 'パスワードと一致しません', 
         ])->validate();

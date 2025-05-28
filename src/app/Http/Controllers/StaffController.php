@@ -10,11 +10,8 @@ use App\Models\Attendance;
 use App\Models\BreakTime;
 
 
-
 class StaffController extends Controller
 {
-
-
     //スタッフ一覧ページ
     public function showStaffList()
     {
@@ -41,7 +38,9 @@ class StaffController extends Controller
             ->whereYear('date', $date->year)
             ->whereMonth('date', $date->month)
             ->get()
-            ->keyBy('date');
+            ->keyBy(function ($item) {
+                return Carbon::parse($item->date)->toDateString(); // ← ここを追加修正！
+            });
 
         // 休憩データ
         $breakTimes = BreakTime::where('user_id', $user->id)

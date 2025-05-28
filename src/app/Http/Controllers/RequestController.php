@@ -58,6 +58,7 @@ class RequestController extends Controller
     //管理者用申請承認
     public function approveRequest(Request $request, $attendance_correct_request)
     {
+       
         $correctRequest = CorrectRequest::findOrFail($attendance_correct_request);
         $attendance = $correctRequest->attendance;
         $breakTimeRequests = BreakTimeRequest::where('correct_request_id', $correctRequest->id)->get();
@@ -78,6 +79,7 @@ class RequestController extends Controller
             'start_time' => Carbon::parse($date . ' ' . $request->input('start_time')),
             'end_time' => Carbon::parse($date . ' ' . $request->input('end_time')),
             'work_time' => gmdate('H:i:s', $workTimes),
+            'note' => $request->input('note'),
         ]);
 
         foreach ($breakTimeRequests as $breakTimeRequest) {
