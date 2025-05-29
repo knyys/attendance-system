@@ -87,6 +87,19 @@ password: admin1111
 ## ER図
 ![attendance-system](https://github.com/user-attachments/assets/409382a9-83e4-46d0-a320-67fb4441e92d)
 
+## PHPUnitを利用したテストに関して
+以下のコマンド:
+ ```vim
+//テスト用データベースの作成
+docker-compose exec mysql bash
+mysql -u root -p
+//パスワードはrootと入力
+create database test_database;
+
+docker-compose exec php bash
+php artisan migrate:fresh --env=testing
+./vendor/bin/phpunit
+ ```
 
 ## URL
 - 開発環境：http://localhost/
