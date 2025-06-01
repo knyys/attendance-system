@@ -30,7 +30,6 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 
 /******* 一般ユーザー用 *******/
-
 Route::post('login', [LoginController::class, 'login']); //ログイン
 Route::post('logout', [LoginController::class, 'logout'])->name('logout'); //ログアウト
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -57,7 +56,7 @@ Route::prefix('admin')->group(function () {
 });
 Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [RequestController::class, 'showApproveForm'])->name('approve.form'); //申請承認画面
 Route::post('/stamp_correction_request/approve/{attendance_correct_request}', [RequestController::class, 'approveRequest'])->name('request.approve'); //申請承認
-
+//CSV出力
 Route::get('/export-attendance', [ExportController::class, 'export'])->name('export.attendances');
 
 

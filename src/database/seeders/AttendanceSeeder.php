@@ -17,7 +17,7 @@ class AttendanceSeeder extends Seeder
     public function run()
     {
         $userIds = [1, 2, 3];
-        $months = ['2025-03', '2025-04'];
+        $months = ['2025-04', '2025-05'];
 
         foreach ($userIds as $userId) {
             foreach ($months as $month) {

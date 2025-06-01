@@ -17,7 +17,7 @@ body {
 
 .approve-form__title {
     border-left: solid 10px black;
-    padding: 0 0 0 30px;
+    padding-left: 30px;
     align-items: flex-start;
     font-size: 30px;
     margin-bottom: 100px;
@@ -88,13 +88,7 @@ body {
     background-color: #6b6b6b;
     font-size: 20px;
     border-radius: 5px;
-}
-
-.form__error{
-    font-size: 16px;
-    color: red;
-    margin: 10px 0;
-    font-weight: normal;
+    border: none;
 }
 
 .approve-form__input--requested{
@@ -112,3 +106,64 @@ body {
     color: black;
     padding: 0 5px;
 }
+
+@media(min-width: 768px) and (max-width: 850px) {
+
+    .approve-form {
+        top: 80px;
+        left: 10%;
+    }
+    
+    .approve-form__title {
+        border-left: solid 8px black;
+        padding-left: 20px;
+        font-size: 20px;
+        margin-bottom: 50px;
+    }
+    
+    .approve-form__table {
+        width: 100%;
+        font-size: 14px;
+    }
+    
+    .approve-form__label {
+        padding: 30px 0 30px 90px;
+        font-size: 14px;
+    }
+    
+    .approve-form__value {
+        font-size: 14px;
+        padding-left: 20px;
+    }
+    
+    .approve-form__button{
+        width: 100%;
+    }
+    
+    .approve-form__button--submit{
+        margin: 30px 0 30px 0;
+        height: 35px;
+        width: 120px;
+        font-size: 14px;
+    }
+    
+    .approve-form__button--disabled{
+        margin: 30px 0 30px 0;
+        height: 35px;
+        width: 120px;
+        font-size: 14px;
+    }
+    
+    .approve-form__input--requested{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 47%;
+        padding: 0
+    }
+    
+    .approve-form__note--requested {
+        font-size: 14px;
+        padding-left: 20px;
+    }
+}    

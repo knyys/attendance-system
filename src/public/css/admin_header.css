@@ -1,50 +1,77 @@
-body{
+body {
     max-width: 100vw;
 }
 
-.header{
+.header {
     width: 100%;
     height: auto;
     background-color: black;
     display: flex;
 }
 
-.header__logo{
-    width: 65%;
+.header__logo {
+    width: 60%;
     padding: 10px 15px;
 }
 
-.header__logo img{
-    height: 40px;
-    width: 30%;
+.header__logo img {
+    height: 30px;
+    width: 33%;
 }
 
-.header__inner{
-    width: 35%;
+.header__inner {
+    width: 40%;
     justify-content: end;
 }
 
-.header__nav{
+.header__nav {
     display: flex;
     justify-content: space-between;
-    margin-right: 50px;
+    padding-right: 20px;
 }
 
-.header__link{
+.header__link {
     color: white;
-    font-size: 25px;
+    font-size: 20px;
     text-decoration: none;
     text-align: center;
     padding: 10px 0;
 }
 
-.header__logout-form button{
+.header__logout-form button {
     color: white;
-    font-size: 25px;
+    font-size: 20px;
     text-decoration: none;
     text-align: center;
     padding: 10px 0;
     background-color: transparent;
     border: none;
     cursor: pointer;
+}
+
+@media (min-width: 768px) and (max-width: 850px) {
+    .header__logo {
+        width: 62%;
+        padding: 5px 0 5px 10px;
+    }
+    .header__logo img {
+        width: 40%;
+        height: auto;
+    }
+
+    .header__inner {
+        width: 35%;
+    }
+
+    .header__nav {
+        width: 100%;
+        padding-right: 5px;
+    }
+    .header__link {
+        font-size: 12px;
+    }
+
+    .header__logout-form button {
+        font-size: 12px;
+    }
 }
