@@ -3,7 +3,7 @@ body{
 }
 
 .content{
-    margin-top: 10%;
+    margin-top: 7%;
 }
 
 .attendance-register{
@@ -21,18 +21,18 @@ body{
     padding: 3px 20px;
     background-color: rgb(192, 191, 191);
     border-radius: 30px;
-    font-size: 18px;
+    font-size: 14px;
     margin: 0;
     color:rgb(76, 75, 75);
 }
 
 .attendance-info__date{
-    font-size: 36px;
+    font-size: 30px;
     margin: 30px 0 0 0;
 }
 
 .attendance-info__time{
-    font-size: 65px;
+    font-size: 55px;
     text-align: center;
     align-items: center;
     font-weight: bold;
@@ -48,33 +48,68 @@ body{
 
 .attendance-register__button {
     color: #fff;
-    font-size: 25px;
-    height: 50px;
+    font-size: 20px;
+    height: 40px;
     border: none;
     border-radius: 10px;
     border: black solid 1px;
     background-color: black;
     cursor: pointer;
     text-align: center;
-    padding: 5px 50px;
+    padding: 5px 40px;
     margin-top: 30px;
 }
 
 .attendance-register__button--break {
     color: black;
-    font-size: 25px;
-    height: 50px;
+    font-size: 20px;
+    height: 40px;
     border: none;
     border-radius: 10px;
     border: white solid 1px;
     background-color: white;
     cursor: pointer;
     text-align: center;
-    padding: 5px 45px;
+    padding: 5px 35px;
     margin-top: 30px;
 }
 
 .message{
-    font-size: 20px;
+    font-size: 18px;
     margin-top: 40px;
+    text-align: center;
+    align-items: center;
+}
+
+@media(min-width: 768px) and (max-width: 850px) {
+
+    .attendance-status{
+        font-size: 12px;
+    }
+    
+    .attendance-info__date{
+        font-size: 26px;
+    }
+    
+    .attendance-info__time{
+        font-size: 50px;
+    }
+    
+    
+    .attendance-register__button {
+        font-size: 18px;
+        height: 40px;
+        padding: 5px 40px;
+    }
+    
+    .attendance-register__button--break {
+        font-size: 18px;
+        height: 40px;
+        padding: 5px 35px;
+    }
+    
+    .message{
+        font-size: 18px;
+        margin-top: 30px;
+    }
 }

@@ -39,7 +39,7 @@ class StaffController extends Controller
             ->whereMonth('date', $date->month)
             ->get()
             ->keyBy(function ($item) {
-                return Carbon::parse($item->date)->toDateString(); // ← ここを追加修正！
+                return Carbon::parse($item->date)->toDateString(); 
             });
 
         // 休憩データ

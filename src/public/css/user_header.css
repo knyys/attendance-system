@@ -10,29 +10,32 @@ body{
 }
 
 .header__logo{
-    width: 73%;
+    width: 70%;
     padding: 10px 15px;
 }
 
 .header__logo img{
-    height: 40px;
-    width: 25%;
+    height: 35px;
+    width: 30%;
 }
 
 .header__inner{
-    width: 27%;
+    width: 30%;
+    display: flex;
     justify-content: end;
 }
 
 .header__nav{
     display: flex;
     justify-content: space-between;
-    margin-right: 50px;
+    align-items: center;
+    width: 100%;
+    padding-right: 30px;
 }
 
 .header__link{
     color: white;
-    font-size: 25px;
+    font-size: 20px;
     text-decoration: none;
     text-align: center;
     padding: 10px 0;
@@ -40,11 +43,39 @@ body{
 
 .header__logout-form button{
     color: white;
-    font-size: 25px;
+    font-size: 20px;
     text-decoration: none;
     text-align: center;
     padding: 10px 0;
     background-color: transparent;
     border: none;
     cursor: pointer;
+}
+
+@media(min-width: 768px) and (max-width: 850px) {
+    
+    .header__logo{
+        width: 60%;
+    }
+    
+    .header__logo img{
+        height: auto;
+        width: 43%;
+    }
+    
+    .header__inner{
+        width: 40%;
+    }
+    
+    .header__nav{
+        width: 100%;
+    }
+    
+    .header__link{
+        font-size: 15px;
+    }
+    
+    .header__logout-form button{
+        font-size: 15px;
+    }
 }

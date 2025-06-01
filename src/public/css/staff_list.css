@@ -11,18 +11,18 @@ body {
 
 .content h2 {
     border-left: solid 10px black;
-    padding: 0 0 0 30px;
+    padding-left: 30px;
     align-items: flex-start;
     position: absolute;
     top: 50px;
     left: 23%;
-    font-size: 30px;
+    font-size: 25px;
     margin: 0;
 }
 
 .staff-list{
     position: absolute;
-    top: 200px;
+    top: 170px;
     left: 23%;
     width: 77%;
 }
@@ -30,7 +30,7 @@ body {
 .staff-list-table{
     width: 75%;
     border-collapse: collapse;
-    font-size: 20px;
+    font-size: 18px;
     color: rgb(99, 98, 98);
     background-color: white;
     border-radius: 10px;
@@ -43,12 +43,43 @@ body {
     border-bottom: 2px solid rgb(182, 180, 180);
     align-items: center;
     justify-items: center;
-    padding: 10px 180px;
+    padding: 10px 100px;
 }
 
 .staff-list-table-detail{
     text-decoration: none;
     color: black;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 18px;
+}
+
+@media(min-width: 768px) and (max-width: 850px) {
+    
+    .content h2 {
+        border-left: solid 8px black;
+        padding-left: 20px;
+        left: 10%;
+        font-size: 20px;
+        margin: 0;
+    }
+    
+    .staff-list{
+        top: 130px;
+        left: 10%;
+        width: 80%;
+    }
+    
+    .staff-list-table{
+        width: 100%;
+        font-size: 14px;
+    }
+    
+    .staff-list-table-header,
+    .staff-list-table-row{
+        padding: 8px 100px;
+    }
+    
+    .staff-list-table-detail{
+        font-size: 14px;
+    }
 }
