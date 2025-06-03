@@ -71,14 +71,26 @@ class RequestController extends Controller
             return $end - $start;
         });
 
-        $startTime = strtotime($correctRequest->start_time);
-        $endTime = strtotime($correctRequest->end_time);
-        $workTimes = $endTime - $startTime - $totalBreakSeconds;
+        $date = Carbon::parse($attendance->date)->format('Y-m-d');
+
+        $startInput = $request->input('start_time');
+        $endInput = $request->input('end_time');
+
+        $start = (strlen($startInput) <= 5)
+            ? Carbon::parse($date . ' ' . $startInput)
+            : Carbon::parse($startInput);
+
+        $end = (strlen($endInput) <= 5)
+            ? Carbon::parse($date . ' ' . $endInput)
+            : Carbon::parse($endInput);
+
+        $workSeconds = $end->diffInSeconds($start) - $totalBreakSeconds;
+        $workSeconds = max($workSeconds, 0);
 
         $attendance->update([
-            'start_time' => Carbon::parse($date . ' ' . $request->input('start_time')),
-            'end_time' => Carbon::parse($date . ' ' . $request->input('end_time')),
-            'work_time' => gmdate('H:i:s', $workTimes),
+            'start_time' => $start,
+            'end_time' => $end,
+            'work_time' => gmdate('H:i:s', $workSeconds),
             'note' => $request->input('note'),
         ]);
 

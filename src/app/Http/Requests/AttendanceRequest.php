@@ -123,8 +123,8 @@ class AttendanceRequest extends FormRequest
     
                 // 休憩時間の開始>=終了
                 if ($breakStartTimestamp >= $breakEndTimestamp) {
-                    $validator->errors()->add("break_start_time.$i", '休憩開始時刻は休憩終了時刻より前に設定してください');
-                    $validator->errors()->add("break_end_time.$i", '休憩終了時刻は休憩開始時刻より後に設定してください');
+                    $validator->errors()->add("break_start_time.$i", '休憩開始時刻もしくは休憩終了時刻が不適切な値です');
+                    $validator->errors()->add("break_end_time.$i", '休憩開始時刻もしくは休憩終了時刻が不適切な値です');
                 }
     
                 // 重複

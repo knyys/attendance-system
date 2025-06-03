@@ -54,7 +54,9 @@ class AttendanceController extends Controller
     //一般ユーザー用出勤登録処理
     public function store(Request $request)
     {
-        $userId = $request->user_id;
+        $message = '';
+
+        $userId = Auth::id();
         $today = now()->toDateString();
         $now = now();
 
