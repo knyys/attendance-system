@@ -16,7 +16,11 @@ class AttendanceSeeder extends Seeder
      */
     public function run()
     {
-        $userIds = [1, 2, 3];
+        $userIds = \App\Models\User::whereIn('email', [
+            'user@email.com',
+            'user2@email.com',
+            'user3@email.com',
+        ])->pluck('id')->toArray();
         $months = ['2025-04', '2025-05'];
 
         foreach ($userIds as $userId) {
@@ -55,7 +59,7 @@ class AttendanceSeeder extends Seeder
                     // 勤務データ作成
                     $attendance = Attendance::create([
                         'user_id' => $userId,
-                        'date' => $dateString,
+                        'date' => Carbon::parse($dateString)->format('Y-m-d'),
                         'start_time' => $startTime->format('H:i:s'),
                         'end_time' => $endTime->format('H:i:s'),
                         'work_time' => gmdate('H:i:s', $endTime->diffInSeconds($startTime)), // 後で休憩引く
