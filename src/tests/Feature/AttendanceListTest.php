@@ -154,7 +154,6 @@ class AttendanceListTest extends TestCase
         $users = User::all();
 
         foreach ($users as $user) {
-            // 勤怠データ作成
             $attendance = Attendance::create([
                 'user_id' => $user->id,
                 'date' => $today,
@@ -162,8 +161,6 @@ class AttendanceListTest extends TestCase
                 'end_time' => '18:00:00',
                 'work_time' => '08:00:00',
             ]);
-    
-            // 任意：休憩データも作成（ここでは1時間）
             BreakTime::create([
                 'attendance_id' => $attendance->id,
                 'user_id' => $user->id,
