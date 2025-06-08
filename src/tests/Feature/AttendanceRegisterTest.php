@@ -398,7 +398,53 @@ class AttendanceRegisterTest extends TestCase
         $this->assertStringContainsString('name="action" value="end_break"', $content); // 休憩戻
     }
 
-    // 休憩--休憩が管理画面で確認できる
+    // 休憩--休憩時間の合計が管理画面で確認できる
+    public function test_register_break_time_is_recorded()
+    {
+        Carbon::setTestNow('2025-06-02 09:00:00');
+
+        /** @var \App\Models\User $user */
+        $user = User::factory()->create([
+            'email_verified_at' => now(),
+        ]);
+        $this->actingAs($user);
+
+        Attendance::where('user_id', $user->id)
+            ->where('date', '2025-06-02')
+            ->delete();
+
+        $attendance = Attendance::create([
+            'user_id' => $user->id,
+            'date' => '2025-06-02',
+            'start_time' => '09:00:00',
+        ]);
+        
+        // 休憩1
+        BreakTime::create([
+            'user_id' => $user->id,
+            'attendance_id' => $attendance->id,
+            'date' => '2025-06-02',
+            'start_time' => '12:00:00',
+            'end_time' => '12:30:00',
+        ]);
+
+        // 休憩2
+        BreakTime::create([
+            'user_id' => $user->id,
+            'attendance_id' => $attendance->id,
+            'date' => '2025-06-02',
+            'start_time' => '13:30:00',
+            'end_time' => '14:00:00',
+        ]);
+
+        $response = $this->get('/attendance/list');
+
+        $response->assertSee('06/02')
+                 ->assertSee('01:00');
+
+        Carbon::setTestNow();
+    }
+
 
     // 退勤--退勤ボタンが正しく機能する
     public function test_register_end_work()

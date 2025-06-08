@@ -87,10 +87,10 @@
                             </div>
                             <div class="form__error">
                             @if ($errors->has("break_start_time.{$breakTimes->count()}"))
-    <div>{{ $errors->first("break_start_time.{$breakTimes->count()}") }}</div>
-@elseif ($errors->has("break_end_time.{$breakTimes->count()}"))
-    <div>{{ $errors->first("break_end_time.{$breakTimes->count()}") }}</div>
-@endif
+                                <div>{{ $errors->first("break_start_time.{$breakTimes->count()}") }}</div>
+                            @elseif ($errors->has("break_end_time.{$breakTimes->count()}"))
+                                <div>{{ $errors->first("break_end_time.{$breakTimes->count()}") }}</div>
+                            @endif
                             </div>
                         </td>
                     </tr>
@@ -99,19 +99,19 @@
                         <td class="attendance-detail__label">休憩</td>
                         <td class="attendance-detail__value">
                         <div>
-            <input class="attendance-detail__input" type="text" name="break_start_time[]" value="{{ old('break_start_time.0') }}">
-            <span class="attendance-detail__input-separator">~</span>
-            <input class="attendance-detail__input" type="text" name="break_end_time[]" value="{{ old('break_end_time.0') }}">
-        </div>
-        <div class="form__error">
-            @if ($errors->has('break_time.0'))
-                <div>{{ $errors->first('break_time.0') }}</div>
-            @elseif ($errors->has('break_start_time.0'))
-                <div>{{ $errors->first('break_start_time.0') }}</div>
-            @elseif ($errors->has('break_end_time.0'))
-                <div>{{ $errors->first('break_end_time.0') }}</div>
-            @endif
-        </div>
+                            <input class="attendance-detail__input" type="text" name="break_start_time[]" value="{{ old('break_start_time.0') }}">
+                            <span class="attendance-detail__input-separator">~</span>
+                            <input class="attendance-detail__input" type="text" name="break_end_time[]" value="{{ old('break_end_time.0') }}">
+                        </div>
+                        <div class="form__error">
+                            @if ($errors->has('break_time.0'))
+                                <div>{{ $errors->first('break_time.0') }}</div>
+                            @elseif ($errors->has('break_start_time.0'))
+                                <div>{{ $errors->first('break_start_time.0') }}</div>
+                            @elseif ($errors->has('break_end_time.0'))
+                                <div>{{ $errors->first('break_end_time.0') }}</div>
+                            @endif
+                        </div>
                         </td>
                     </tr>
                 @endif     

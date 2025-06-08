@@ -354,7 +354,7 @@ class AttendanceController extends Controller
             $start_time = $attendances?->start_time ? Carbon::parse($attendances->start_time)->format('H:i') : '';
             $end_time = $attendances?->end_time ? Carbon::parse($attendances->end_time)->format('H:i') : '';
             $work_time = $attendances?->work_time ? Carbon::parse($attendances->work_time)->format('H:i') : '';
-            $id = $attendance?->id ?? null;
+            $id = $attendances?->id ?? null;
 
             $totalBreakTime = '';
             if ($breakTimes->isNotEmpty()) {
