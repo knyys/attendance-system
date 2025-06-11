@@ -337,4 +337,208 @@ class AttendanceDetailTest extends TestCase
         $response->assertRedirect('/attendance/' . $attendance->id);
 
     }
+
+    //admin--勤怠詳細画面に表示されるデータが選択したものになっている
+    public function test_admin_attendance_detail_data_display()
+    {
+        $today = Carbon::now()->toDateString();
+
+        $user = \App\Models\User::where('email', 'user@email.com')->first();
+        $this->actingAs($user);
+
+        $attendance = Attendance::create([
+            'user_id' => $user->id,
+            'date' => $today,
+            'start_time' => '09:00:00',
+            'end_time' => '18:00:00',
+            'work_time' => '08:00:00',
+        ]);
+        BreakTime::create([
+            'attendance_id' => $attendance->id,
+            'user_id' => $user->id,
+            'date' => $today,
+            'start_time' => '12:00:00',
+            'end_time' => '13:00:00',
+        ]);
+
+        $admin = \App\Models\User::where('email', 'admin@email.com')->first();
+        $this->actingAs($admin);
+
+        $response = $this->get('/admin/attendance/' . $attendance->id);
+
+        $response->assertStatus(200);
+        
+        $response->assertViewHas('data', function ($attendanceData) use ($user, $attendance) {
+            return $attendanceData->user->id === $user->id &&
+                    \Carbon\Carbon::parse($attendanceData->start_time)->format('H:i') === '09:00' &&
+                    \Carbon\Carbon::parse($attendanceData->end_time)->format('H:i') === '18:00' &&
+                    \Carbon\Carbon::parse($attendanceData->date)->format('Y年') === \Carbon\Carbon::parse($attendance->date)->format('Y年') &&
+                    \Carbon\Carbon::parse($attendance->date)->format('n月j日');
+        });
+        $response->assertSee($user->name);
+        $response->assertSee('09:00');
+        $response->assertSee('18:00');
+        $response->assertSee('12:00');
+        $response->assertSee('13:00');
+    }
+
+    //admin--出勤時間が退勤時間より後になっている場合、エラーメッセージが表示される
+    public function test_admin_attendance_detail_invalid_time_error()
+    {
+        $today = Carbon::now()->toDateString();
+
+        $user = \App\Models\User::where('email', 'user@email.com')->first();
+        $this->actingAs($user);
+
+        $attendance = Attendance::create([
+            'user_id' => $user->id,
+            'date' => $today,
+            'start_time' => '09:00:00',
+            'end_time' => '18:00:00',
+            'work_time' => '08:00:00',
+        ]);
+        BreakTime::create([
+            'attendance_id' => $attendance->id,
+            'user_id' => $user->id,
+            'date' => $today,
+            'start_time' => '12:00:00',
+            'end_time' => '13:00:00',
+        ]);
+
+        $admin = \App\Models\User::where('email', 'admin@email.com')->first();
+        $this->actingAs($admin);
+
+        $response = $this->post('/admin/attendance/' . $attendance->id, [
+            'start_time' => '19:00',
+            'end_time' => '18:00',
+            'break_start_time' => ['12:00'], 
+            'break_end_time' => ['13:00'],
+            'note' => '備考',
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors([
+            'start_time' => '出勤時間もしくは退勤時間が不適切な値です',
+        ]);
+    }
+
+    //admin--休憩開始時間が退勤時間より後になっている場合、エラーメッセージが表示される
+    public function test_admin_attendance_detail_invalid_break_time_error()
+    {
+        $today = Carbon::now()->toDateString();
+
+        $user = \App\Models\User::where('email', 'user@email.com')->first();
+        $this->actingAs($user);
+
+        $attendance = Attendance::create([
+            'user_id' => $user->id,
+            'date' => $today,
+            'start_time' => '09:00:00',
+            'end_time' => '18:00:00',
+            'work_time' => '08:00:00',
+        ]);
+        BreakTime::create([
+            'attendance_id' => $attendance->id,
+            'user_id' => $user->id,
+            'date' => $today,
+            'start_time' => '12:00:00',
+            'end_time' => '13:00:00',
+        ]);
+
+        $admin = \App\Models\User::where('email', 'admin@email.com')->first();
+        $this->actingAs($admin);
+
+        $response = $this->post('/admin/attendance/' . $attendance->id, [
+            'start_time' => '09:00',
+            'end_time' => '18:00',
+            'break_start_time' => ['19:00'], 
+            'break_end_time' => ['20:00'],
+            'note' => '備考',
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors([
+            'break_start_time.0' => '休憩時間が勤務時間外です',
+        ]);
+    }
+
+    //admin--休憩終了時間が退勤時間より後になっている場合、エラーメッセージが表示される
+    public function test_admin_attendance_detail_invalid_break_end_time_error()
+    {
+        $today = Carbon::now()->toDateString();
+
+        $user = \App\Models\User::where('email', 'user@email.com')->first();
+        $this->actingAs($user);
+
+        $attendance = Attendance::create([
+            'user_id' => $user->id,
+            'date' => $today,
+            'start_time' => '09:00:00',
+            'end_time' => '18:00:00',
+            'work_time' => '08:00:00',
+        ]);
+        BreakTime::create([
+            'attendance_id' => $attendance->id,
+            'user_id' => $user->id,
+            'date' => $today,
+            'start_time' => '12:00:00',
+            'end_time' => '13:00:00',
+        ]);
+
+        $admin = \App\Models\User::where('email', 'admin@email.com')->first();
+        $this->actingAs($admin);
+
+        $response = $this->post('/admin/attendance/' . $attendance->id, [
+            'start_time' => '09:00',
+            'end_time' => '18:00',
+            'break_start_time' => ['13:00'], 
+            'break_end_time' => ['20:00'],
+            'note' => '備考',
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors([
+            'break_end_time.0' => '休憩時間が勤務時間外です',
+        ]);
+    }
+
+    //admin--備考欄が未入力の場合のエラーメッセージが表示される
+    public function test_admin_attendance_detail_note_required_error()
+    {
+        $today = Carbon::now()->toDateString();
+
+        $user = \App\Models\User::where('email', 'user@email.com')->first();
+        $this->actingAs($user);
+
+        $attendance = Attendance::create([
+            'user_id' => $user->id,
+            'date' => $today,
+            'start_time' => '09:00:00',
+            'end_time' => '18:00:00',
+            'work_time' => '08:00:00',
+        ]);
+        BreakTime::create([
+            'attendance_id' => $attendance->id,
+            'user_id' => $user->id,
+            'date' => $today,
+            'start_time' => '12:00:00',
+            'end_time' => '13:00:00',
+        ]);
+
+        $admin = \App\Models\User::where('email', 'admin@email.com')->first();
+        $this->actingAs($admin);
+
+        $response = $this->post('/admin/attendance/' . $attendance->id, [
+            'start_time' => '09:00',
+            'end_time' => '18:00',
+            'break_start_time' => ['12:00'], 
+            'break_end_time' => ['13:00'],
+            'note' => '',
+        ]);
+
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors([
+            'note' => '備考を記入してください',
+        ]);
+    }
 }
