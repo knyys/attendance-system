@@ -9,7 +9,7 @@
 <div class="content">
     <div class="attendance-register">
         <div class="attendance-register-status">
-             @if ($status === 'not_working')
+            @if ($status === 'not_working')
                 <p class="attendance-status">勤務外</p>
 
             @elseif ($status === 'working')
@@ -32,14 +32,22 @@
             <input type="hidden" name="user_id" value="{{ Auth::id() }}">
 
             @if ($status === 'not_working')
-                <button class="attendance-register__button" name="action" value="start_work" type="submit">出勤</button>
+                <button class="attendance-register__button" name="action" value="start_work" type="submit">
+                    出勤
+                </button>
 
             @elseif ($status === 'working')
-                <button class="attendance-register__button" name="action" value="end_work" type="submit">退勤</button>
-                <button class="attendance-register__button--break" name="action" value="start_break" type="submit">休憩入</button>
+                <button class="attendance-register__button" name="action" value="end_work" type="submit">
+                    退勤
+                </button>
+                <button class="attendance-register__button--break" name="action" value="start_break" type="submit">
+                    休憩入
+                </button>
 
             @elseif ($status === 'on_break')
-                <button class="attendance-register__button--break" name="action" value="end_break" type="submit">休憩戻</button>
+                <button class="attendance-register__button--break" name="action" value="end_break" type="submit">
+                    休憩戻
+                </button>
             @endif
         </form>
         @if (session('status'))

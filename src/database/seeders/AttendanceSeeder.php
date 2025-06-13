@@ -62,7 +62,7 @@ class AttendanceSeeder extends Seeder
                         'date' => Carbon::parse($dateString)->format('Y-m-d'),
                         'start_time' => $startTime->format('H:i:s'),
                         'end_time' => $endTime->format('H:i:s'),
-                        'work_time' => gmdate('H:i:s', $endTime->diffInSeconds($startTime)), // 後で休憩引く
+                        'work_time' => gmdate('H:i:s', $endTime->diffInSeconds($startTime)), 
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);

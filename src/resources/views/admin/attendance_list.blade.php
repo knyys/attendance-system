@@ -9,13 +9,13 @@
 <div class="content">
     <h2>{{ $current->format('Y年n月j日') }}の勤怠</h2>
     <div class="attendance-list-pagenate">  
-    <a href="{{ route('admin.attendance.list', ['year' => $prev->year, 'month' => $prev->month, 'day' => $prev->day]) }}">← 前日</a>
-    <div class="attendance-list-pagenate-current">
-        <img src="{{ asset('storage/カレンダーアイコン8.png') }}" alt="calendar-icon">
-        <span>{{ $current->format('Y/m/d') }}</span>
+        <a href="{{ route('admin.attendance.list', ['year' => $prev->year, 'month' => $prev->month, 'day' => $prev->day]) }}">← 前日</a>
+        <div class="attendance-list-pagenate-current">
+            <img src="{{ asset('storage/カレンダーアイコン8.png') }}" alt="calendar-icon">
+            <span>{{ $current->format('Y/m/d') }}</span>
+        </div>
+        <a href="{{ route('admin.attendance.list', ['year' => $next->year, 'month' => $next->month, 'day' => $next->day]) }}">翌日 →</a>
     </div>
-    <a href="{{ route('admin.attendance.list', ['year' => $next->year, 'month' => $next->month, 'day' => $next->day]) }}">翌日 →</a>
-</div>
     @php
         // 勤怠データがあるか
         $hasAttendanceData = collect($attendances)->contains(function ($item) {
@@ -41,9 +41,9 @@
                 <td>{{ $item['total_break_time'] }}</td>
                 <td>{{ $item['work_time'] }}</td>
                 <td>
-                    @if ($item['id'])
-                        <a class="attendance-table-detail" href="{{ route('admin.attendance.detail', ['id' => $item['id']]) }}">詳細</a>
-                    @endif
+                @if ($item['id'])
+                    <a class="attendance-table-detail" href="{{ route('admin.attendance.detail', ['id' => $item['id']]) }}">詳細</a>
+                @endif
                 </td>
             </tr>
         @endforeach
@@ -53,7 +53,6 @@
             </tr>
         @endif
         </tr>
-
     </table>
 </div>
 @endsection

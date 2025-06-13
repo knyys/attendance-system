@@ -39,7 +39,7 @@ body {
     text-align: center;
 }
 
-.attendance-list-pagenate-current img{
+.attendance-list-pagenate-current img {
     width: 20px;
     height: 20px;
     align-items: center;
@@ -81,31 +81,31 @@ td {
     font-size: 16px;
 }
 
-@media(min-width: 768px) and (max-width: 850px) {
+@media (min-width: 768px) and (max-width: 850px) {
     .content {
         left: 10%;
         width: 80%;
     }
-    
+
     .content h2 {
         padding-left: 20px;
         border-left: solid 8px black;
         font-size: 20px;
         margin: 40px 0;
     }
-    
+
     .attendance-list-pagenate {
         width: 100%;
         height: auto;
         margin: 4px 0 4px 0;
     }
-    
+
     .attendance-list-pagenate a {
         font-size: 16px;
         margin-top: 0;
     }
-    
-    .attendance-list-pagenate-current img{
+
+    .attendance-list-pagenate-current img {
         margin: 5px 0 8px 0;
         width: 16px;
         height: 16px;
@@ -116,13 +116,13 @@ td {
         font-size: 16px;
         margin-left: 6px;
     }
-    
+
     .attendance-table {
         width: 100%;
         font-size: 14px;
         margin: 35px 0;
     }
-    
+
     td {
         border-bottom: 2px solid rgb(182, 180, 180);
         padding: 8px 0 8px 30px;
@@ -134,5 +134,4 @@ td {
         font-weight: bold;
         font-size: 14px;
     }
-
 }

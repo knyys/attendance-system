@@ -8,10 +8,10 @@
 @section('content')
 <div class="content">
     <h2>申請一覧</h2>
-
     @php
         $currentPage = request('page', 'request'); 
     @endphp
+    
     <div class="request-list__tab-box">
         <ul class="tab-list">
             <li class="tab">

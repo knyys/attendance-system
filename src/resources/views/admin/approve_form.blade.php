@@ -12,37 +12,37 @@
             勤怠詳細
         </h2>
         <form action="{{ route('request.approve', ['attendance_correct_request' => $correctRequest->id]) }}" method="post" >
-            @csrf
+        @csrf
             <table class="approve-form__table">
-            <tr class="approve-form__row">
-                <td class="approve-form__label">名前</td>
-                <td class="approve-form__value">{{ $correctRequest->attendance->user->name }}</td>
-            </tr>
-            <tr class="approve-form__row">
-                <td class="approve-form__label">日付</td>
-                <td class="approve-form__value">
-                    <span class="approve-form__value--day">
-                        {{ \Carbon\Carbon::parse($correctRequest->attendance->date)->format('Y年') }}
-                    </span>
-                    <span class="approve-form__value--day">
-                        {{ \Carbon\Carbon::parse($correctRequest->attendance->date)->format('n月j日') }}
-                    </span>
-                </td>
-            </tr> 
-            <tr class="approve-form__row">
-                <td class="approve-form__label">出勤・退勤</td>
-                <td class="approve-form__value">
-                    <div class="approve-form__input--requested">
-                        <p>{{ \Carbon\Carbon::parse($correctRequest->start_time)->format('H:i') }}</p>
-                        <p>~</p>
-                        <p>{{ \Carbon\Carbon::parse($correctRequest->end_time)->format('H:i') }}</p>
-                        <input type="hidden" name="start_time" value="{{ \Carbon\Carbon::parse($correctRequest->start_time)->format('H:i') }}">
-                        <input type="hidden" name="end_time" value="{{ \Carbon\Carbon::parse($correctRequest->end_time)->format('H:i') }}">
+                <tr class="approve-form__row">
+                    <td class="approve-form__label">名前</td>
+                    <td class="approve-form__value">{{ $correctRequest->attendance->user->name }}</td>
+                </tr>
+                <tr class="approve-form__row">
+                    <td class="approve-form__label">日付</td>
+                    <td class="approve-form__value">
+                        <span class="approve-form__value--day">
+                            {{ \Carbon\Carbon::parse($correctRequest->attendance->date)->format('Y年') }}
+                        </span>
+                        <span class="approve-form__value--day">
+                            {{ \Carbon\Carbon::parse($correctRequest->attendance->date)->format('n月j日') }}
+                        </span>
+                    </td>
+                </tr> 
+                <tr class="approve-form__row">
+                    <td class="approve-form__label">出勤・退勤</td>
+                    <td class="approve-form__value">
+                        <div class="approve-form__input--requested">
+                            <p>{{ \Carbon\Carbon::parse($correctRequest->start_time)->format('H:i') }}</p>
+                            <p>~</p>
+                            <p>{{ \Carbon\Carbon::parse($correctRequest->end_time)->format('H:i') }}</p>
+                            <input type="hidden" name="start_time" value="{{ \Carbon\Carbon::parse($correctRequest->start_time)->format('H:i') }}">
+                            <input type="hidden" name="end_time" value="{{ \Carbon\Carbon::parse($correctRequest->end_time)->format('H:i') }}">
 
-                    </div>
-                </td>
-            </tr>
-            @if($breakTimeRequests->isNotEmpty())
+                        </div>
+                    </td>
+                </tr>
+                @if($breakTimeRequests->isNotEmpty())
                 @foreach($breakTimeRequests as $index => $breakTimeRequest)
                 <tr class="approve-form__row">
                     <td class="approve-form__label">
@@ -67,21 +67,21 @@
                         <div class="approve-form__input--requested"></div>                        
                     </td>
                 </tr>
-            @else
+                @else
                 <tr class="approve-form__row">
                     <td class="approve-form__label">休憩</td>
                     <td class="approve-form__value"></td>
                 </tr>     
-            @endif
-            <tr class="approve-form__row">
-                <td class="approve-form__label">備考</td>
-                <td class="approve-form__value--textarea">
-                    <div>
-                        <p class="approve-form__note--requested">{{ $correctRequest->note }}</p>
-                        <input type="hidden" name="note" value="{{ $correctRequest->note }}">
-                    </div> 
-                </td>
-            </tr>
+                @endif
+                <tr class="approve-form__row">
+                    <td class="approve-form__label">備考</td>
+                    <td class="approve-form__value--textarea">
+                        <div>
+                            <p class="approve-form__note--requested">{{ $correctRequest->note }}</p>
+                            <input type="hidden" name="note" value="{{ $correctRequest->note }}">
+                        </div> 
+                    </td>
+                </tr>
             </table>
             <div class="approve-form__button">
                 @if ($correctRequest->status === 1)

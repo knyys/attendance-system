@@ -20,7 +20,7 @@ body {
     margin: 0;
 }
 
-.request-list__tab-box{
+.request-list__tab-box {
     display: block;
     width: 100%;
     position: absolute;
@@ -57,14 +57,14 @@ body {
     font-weight: bold;
 }
 
-.request-list{
+.request-list {
     position: absolute;
     top: 250px;
     left: 20%;
     width: 80%;
 }
 
-.request-table{
+.request-table {
     width: 75%;
     border-collapse: collapse;
     font-size: 16px;
@@ -74,19 +74,18 @@ body {
 }
 
 .request-table-header,
-.request-table-row{
+.request-table-row {
     grid-template-columns: repeat(6, 1fr);
     display: grid;
 }
 
-.table-row__status{
+.table-row__status {
     text-align: center;
 }
 
 .table-row__label,
-.table-row__cell{
+.table-row__cell {
     text-align: left;
-    
 }
 
 .request-table-header {
@@ -97,38 +96,35 @@ body {
 }
 .request-table-row td {
     border-bottom: 2px solid rgb(182, 180, 180);
-    padding: 10px 0; 
-    
+    padding: 10px 0;
 }
 
-.request-table-row td a{
+.request-table-row td a {
     text-decoration: none;
     color: black;
     font-weight: bold;
     font-size: 16px;
 }
 
-
-@media(min-width: 768px) and (max-width: 850px){
-
+@media (min-width: 768px) and (max-width: 850px) {
     .content h2 {
         border-left: solid 8px black;
         padding-left: 20px;
         left: 10%;
         font-size: 20px;
     }
-    
-    .request-list__tab-box{
+
+    .request-list__tab-box {
         top: 90px;
         left: 10%;
         width: 75%;
     }
-    
+
     .tab-list {
         width: 100%;
         padding: 0 30px;
     }
-    
+
     .tab a {
         font-size: 14px;
     }
@@ -136,36 +132,33 @@ body {
     tab-content active {
         width: 100%;
     }
-    
-    .request-list{
+
+    .request-list {
         top: 190px;
         left: 10%;
         width: 75%;
     }
-    
-    .request-table{
+
+    .request-table {
         font-size: 14px;
         width: 100%;
     }
-    
-    .table-row__status{
+
+    .table-row__status {
         text-align: left;
         padding-left: 20px;
     }
 
     .table-row__label,
-    .table-row__cell{
+    .table-row__cell {
         padding-left: 20px;
     }
 
     .request-table-row td {
         padding-left: 20px;
-        
     }
 
-    .request-table-row td a{
+    .request-table-row td a {
         font-size: 14px;
     }
-
-
 }

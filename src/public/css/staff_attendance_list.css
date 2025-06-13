@@ -1,7 +1,6 @@
 .attendance-csv-export {
     text-align: right;
     width: 75%;
-
 }
 
 .staff-attendance-list-btn {
@@ -13,10 +12,10 @@
     border-radius: 5px;
     cursor: pointer;
     border: none;
-    margin-bottom: 50px;    
+    margin-bottom: 50px;
 }
 
-.staff-attendance-list-btn__disabled{
+.staff-attendance-list-btn__disabled {
     height: 40px;
     width: 150px;
     color: white;
@@ -28,18 +27,18 @@
     margin-bottom: 50px;
 }
 
-@media(min-width: 768px) and (max-width: 850px) {
+@media (min-width: 768px) and (max-width: 850px) {
     .attendance-csv-export {
         width: 100%;
     }
-    
+
     .staff-attendance-list-btn {
         height: 35px;
         width: 120px;
         font-size: 14px;
     }
-    
-    .staff-attendance-list-btn__disabled{
+
+    .staff-attendance-list-btn__disabled {
         height: 35px;
         width: 120px;
         font-size: 14px;

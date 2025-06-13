@@ -47,8 +47,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     //リレーション
-
-        public function attendances()
+    public function attendances()
     {
         return $this->hasMany(Attendance::class);
     }

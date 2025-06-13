@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Attendance;
 use App\Models\BreakTime;
 use App\Models\BreakTimeRequest;
 use App\Models\CorrectRequest;
@@ -37,8 +34,6 @@ class RequestController extends Controller
     
     }
 
-    
-
     //管理者用申請画面
     public function showApproveForm($attendance_correct_request)
     {
@@ -52,13 +47,10 @@ class RequestController extends Controller
             'breakTimeRequests' => $breakTimeRequests,
         ]);
     }    
-    
-
 
     //管理者用申請承認
     public function approveRequest(Request $request, $attendance_correct_request)
     {
-       
         $correctRequest = CorrectRequest::findOrFail($attendance_correct_request);
         $attendance = $correctRequest->attendance;
         $breakTimeRequests = BreakTimeRequest::where('correct_request_id', $correctRequest->id)->get();
@@ -123,6 +115,5 @@ class RequestController extends Controller
 
         return redirect()->route('approve.form', ['attendance_correct_request' => $correctRequest->id]);
     }
-
 
 }
