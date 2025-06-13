@@ -1,12 +1,12 @@
-body{
+body {
     background-color: rgb(231, 231, 231);
 }
 
-.content{
+.content {
     margin-top: 7%;
 }
 
-.attendance-register{
+.attendance-register {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -14,7 +14,7 @@ body{
     align-items: center;
 }
 
-.attendance-status{
+.attendance-status {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,15 +23,15 @@ body{
     border-radius: 30px;
     font-size: 14px;
     margin: 0;
-    color:rgb(76, 75, 75);
+    color: rgb(76, 75, 75);
 }
 
-.attendance-info__date{
+.attendance-info__date {
     font-size: 30px;
     margin: 30px 0 0 0;
 }
 
-.attendance-info__time{
+.attendance-info__time {
     font-size: 55px;
     text-align: center;
     align-items: center;
@@ -39,12 +39,11 @@ body{
     margin: 30px 0 30px 0;
 }
 
-.attendance-register__form{
+.attendance-register__form {
     display: flex;
     justify-content: center;
     gap: 20px;
 }
-
 
 .attendance-register__button {
     color: #fff;
@@ -74,41 +73,39 @@ body{
     margin-top: 30px;
 }
 
-.message{
+.message {
     font-size: 18px;
     margin-top: 40px;
     text-align: center;
     align-items: center;
 }
 
-@media(min-width: 768px) and (max-width: 850px) {
-
-    .attendance-status{
+@media (min-width: 768px) and (max-width: 850px) {
+    .attendance-status {
         font-size: 12px;
     }
-    
-    .attendance-info__date{
+
+    .attendance-info__date {
         font-size: 26px;
     }
-    
-    .attendance-info__time{
+
+    .attendance-info__time {
         font-size: 50px;
     }
-    
-    
+
     .attendance-register__button {
         font-size: 18px;
         height: 40px;
         padding: 5px 40px;
     }
-    
+
     .attendance-register__button--break {
         font-size: 18px;
         height: 40px;
         padding: 5px 35px;
     }
-    
-    .message{
+
+    .message {
         font-size: 18px;
         margin-top: 30px;
     }

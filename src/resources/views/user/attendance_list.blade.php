@@ -33,27 +33,26 @@
             <td>詳細</td>
         </tr>
         @if ($hasAttendanceData)
-            @foreach ($attendances as $item)
-                <tr class="attendance-table-row">
-                    <td>{{ $item['formatted_date'] }}</td>
-                    <td>{{ $item['start_time'] }}</td>
-                    <td>{{ $item['end_time'] }}</td>
-                    <td>{{ $item['total_break_time'] }}</td>
-                    <td>{{ $item['work_time'] }}</td>
-                    <td>
-                        @if ($item['id'])
-                            <a class="attendance-table-detail" href="{{ route('attendance.detail', ['id' => $item['id']]) }}">詳細</a>
-                        @endif
-                    </td>
-                </tr>
-            @endforeach
+        @foreach ($attendances as $item)
+            <tr class="attendance-table-row">
+                <td>{{ $item['formatted_date'] }}</td>
+                <td>{{ $item['start_time'] }}</td>
+                <td>{{ $item['end_time'] }}</td>
+                <td>{{ $item['total_break_time'] }}</td>
+                <td>{{ $item['work_time'] }}</td>
+                <td>
+                    @if ($item['id'])
+                        <a class="attendance-table-detail" href="{{ route('attendance.detail', ['id' => $item['id']]) }}">詳細</a>
+                    @endif
+                </td>
+            </tr>
+        @endforeach
         @else
             <tr>
                 <td colspan="6" style="text-align: center;">勤怠データがありません</td>
             </tr>
         @endif
         </tr>
-
     </table>
 </div>
 @endsection

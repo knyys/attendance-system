@@ -18,8 +18,7 @@
             勤怠詳細
         </h2>
 
-        @if($isEditable)
-        <!-- 修正フォーム表示 -->
+        @if($isEditable)<!-- 修正フォーム表示 -->
         <form action="{{ route('admin.detail.request', ['id' => $data->id]) }}" method="post">
             @csrf
             <table class="attendance-detail__table">
@@ -44,7 +43,7 @@
                         <div>
                             <input class="attendance-detail__input" type="text" name="start_time" value="{{ old("start_time", \Carbon\Carbon::parse($data->start_time)->format('H:i')) }}">
                             <span class="attendance-detail__input-separator">~</span>
-                            <input class="attendance-detail__input" type="text" name="end_time" value="{{ old("end_time", \Carbon\Carbon::parse($data->end_time)->format('H:i')) }}">
+                            <input class="attendance-detail__input" type="text" name="end_time" value="{{ old("end_time", $data->end_time ? \Carbon\Carbon::parse($data->end_time)->format('H:i') : '' ) }}">
                         </div>
                         <div class="form__error">
                             @if ($errors->has('start_time'))
@@ -58,68 +57,69 @@
                     </td>
                 </tr>
                 @if($breakTimes->isNotEmpty())
-                    @foreach($breakTimes as $index => $breakTime)
-                    <tr class="attendance-detail__row">
-                        <td class="attendance-detail__label">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</td>
-                        <td class="attendance-detail__value">
-                            <div>
-                                <input type="hidden" name="break_time_id[]" value="{{ $breakTime->id }}">
-                                <input class="attendance-detail__input" type="text" name="break_start_time[]" value="{{ old("break_start_time.$index", \Carbon\Carbon::parse($breakTime->start_time)->format('H:i')) }}">
-                                <span class="attendance-detail__input-separator">~</span>
-                                <input class="attendance-detail__input" type="text" name="break_end_time[]" value="{{ old("break_end_time.$index", \Carbon\Carbon::parse($breakTime->end_time)->format('H:i')) }}">
-                            </div>
-                            <div class="form__error">
-                                @if ($errors->has("break_times.{$index}"))
-                                    <div>{{ $errors->first("break_times.{$index}") }}</div>
-                                @elseif ($errors->has("break_start_time.{$index}"))
-                                    <div>{{ $errors->first("break_start_time.{$index}") }}</div>
-                                @elseif ($errors->has("break_end_time.{$index}"))
-                                    <div>{{ $errors->first("break_end_time.{$index}") }}</div>
-                                @endif
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-
-                    <tr class="attendance-detail__row">
-                        <td class="attendance-detail__label">
-                            {{ $breakTimes->count() === 0 ? '休憩' : '休憩' . ($breakTimes->count() + 1) }}
-                        </td>
-                        <td class="attendance-detail__value">
-                            <div>
-                                <input class="attendance-detail__input" type="text" name="break_start_time[]" value="{{ old('break_start_time.' . $breakTimes->count()) }}">
-                                <span class="attendance-detail__input-separator">~</span>
-                                <input class="attendance-detail__input" type="text" name="break_end_time[]" value="{{ old('break_end_time.' . $breakTimes->count()) }}">
-                            </div>
-                            <div class="form__error">
-                            @if ($errors->has("break_start_time.{$breakTimes->count()}"))
-                                <div>{{ $errors->first("break_start_time.{$breakTimes->count()}") }}</div>
-                            @elseif ($errors->has("break_end_time.{$breakTimes->count()}"))
-                                <div>{{ $errors->first("break_end_time.{$breakTimes->count()}") }}</div>
-                            @endif
-                            </div>
-                        </td>
-                    </tr>
-                @else
-                    <tr class="attendance-detail__row">
-                        <td class="attendance-detail__label">休憩</td>
-                        <td class="attendance-detail__value">
+                @foreach($breakTimes as $index => $breakTime)
+                <tr class="attendance-detail__row">
+                    <td class="attendance-detail__label">
+                        {{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}
+                    </td>
+                    <td class="attendance-detail__value">
                         <div>
-            <input class="attendance-detail__input" type="text" name="break_start_time[]" value="{{ old('break_start_time.0') }}">
-            <span class="attendance-detail__input-separator">~</span>
-            <input class="attendance-detail__input" type="text" name="break_end_time[]" value="{{ old('break_end_time.0') }}">
-        </div>
-        <div class="form__error">
-            @if ($errors->has('break_time.0'))
-                <div>{{ $errors->first('break_time.0') }}</div>
-            @elseif ($errors->has('break_start_time.0'))
-                <div>{{ $errors->first('break_start_time.0') }}</div>
-            @elseif ($errors->has('break_end_time.0'))
-                <div>{{ $errors->first('break_end_time.0') }}</div>
-            @endif
-        </div>
-                        </td>
-                    </tr>
+                            <input type="hidden" name="break_time_id[]" value="{{ $breakTime->id }}">
+                            <input class="attendance-detail__input" type="text" name="break_start_time[]" value="{{ old("break_start_time.$index", \Carbon\Carbon::parse($breakTime->start_time)->format('H:i')) }}">
+                            <span class="attendance-detail__input-separator">~</span>
+                            <input class="attendance-detail__input" type="text" name="break_end_time[]" value="{{ old("break_end_time.$index", $breakTime->end_time ? \Carbon\Carbon::parse($breakTime->end_time)->format('H:i') : '' ) }}">
+                        </div>
+                        <div class="form__error">
+                            @if ($errors->has("break_times.{$index}"))
+                                <div>{{ $errors->first("break_times.{$index}") }}</div>
+                            @elseif ($errors->has("break_start_time.{$index}"))
+                                <div>{{ $errors->first("break_start_time.{$index}") }}</div>
+                            @elseif ($errors->has("break_end_time.{$index}"))
+                                <div>{{ $errors->first("break_end_time.{$index}") }}</div>
+                            @endif
+                        </div>
+                    </td>
+                </tr>
+                @endforeach
+                <tr class="attendance-detail__row">
+                    <td class="attendance-detail__label">
+                        {{ $breakTimes->count() === 0 ? '休憩' : '休憩' . ($breakTimes->count() + 1) }}
+                    </td>
+                    <td class="attendance-detail__value">
+                        <div>
+                            <input class="attendance-detail__input" type="text" name="break_start_time[]" value="{{ old('break_start_time.' . $breakTimes->count()) }}">
+                            <span class="attendance-detail__input-separator">~</span>
+                            <input class="attendance-detail__input" type="text" name="break_end_time[]" value="{{ old('break_end_time.' . $breakTimes->count()) }}">
+                        </div>
+                        <div class="form__error">
+                        @if ($errors->has("break_start_time.{$breakTimes->count()}"))
+                            <div>{{ $errors->first("break_start_time.{$breakTimes->count()}") }}</div>
+                        @elseif ($errors->has("break_end_time.{$breakTimes->count()}"))
+                            <div>{{ $errors->first("break_end_time.{$breakTimes->count()}") }}</div>
+                        @endif
+                        </div>
+                    </td>
+                </tr>
+                @else
+                <tr class="attendance-detail__row">
+                    <td class="attendance-detail__label">休憩</td>
+                    <td class="attendance-detail__value">
+                        <div>
+                            <input class="attendance-detail__input" type="text" name="break_start_time[]" value="{{ old('break_start_time.0') }}">
+                            <span class="attendance-detail__input-separator">~</span>
+                            <input class="attendance-detail__input" type="text" name="break_end_time[]" value="{{ old('break_end_time.0') }}">
+                        </div>
+                        <div class="form__error">
+                            @if ($errors->has('break_time.0'))
+                                <div>{{ $errors->first('break_time.0') }}</div>
+                            @elseif ($errors->has('break_start_time.0'))
+                                <div>{{ $errors->first('break_start_time.0') }}</div>
+                            @elseif ($errors->has('break_end_time.0'))
+                                <div>{{ $errors->first('break_end_time.0') }}</div>
+                            @endif
+                        </div>
+                    </td>
+                </tr>
                 @endif     
                 <tr class="attendance-detail__row">
                     <td class="attendance-detail__label">備考</td>
@@ -140,7 +140,7 @@
             </div>
         </form>
 
-    @else <!-- 修正フォーム非表示 -->
+        @else <!-- 修正フォーム非表示 -->
         <table class="attendance-detail__table">
             <tr class="attendance-detail__row">
                 <td class="attendance-detail__label">名前</td>
@@ -208,7 +208,7 @@
             <div class="attendance-detail__button">
                 <p class="notice">*承認待ちのため修正はできません。</p>
             </div>
-    @endif
+        @endif
     </div>
 </div>
 @endsection

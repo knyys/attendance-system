@@ -17,7 +17,6 @@ class StaffController extends Controller
     {
         $staffs = User::where('is_admin', 0)->get();
         return view('admin.staff_list', ['staffs' => $staffs]);
-
     }
 
     //スタッフ別勤怠一覧ページ
@@ -89,7 +88,5 @@ class StaffController extends Controller
             'next' => $next,
             'user' => $user,
         ]);
-
     }
-
 }

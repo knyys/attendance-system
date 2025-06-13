@@ -25,7 +25,6 @@
             </span>
         </div>
         @endif
-       
 
         <form class="form" action="{{ request()->is('admin/login') ? '/admin/login' : '/login' }}" method="post" novalidate>
             @csrf

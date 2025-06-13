@@ -8,7 +8,6 @@
 @section('content')
 <div class="content">
     <h2>申請一覧</h2>
-
     @php
         $currentPage = request('page', 'request'); 
     @endphp

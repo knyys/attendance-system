@@ -14,11 +14,8 @@
     <body>
         <header class="header">
             <div class="header__logo">
-                <a href="">
-                    <img src="{{ asset('storage/logo.svg') }}" alt="logo">
-                </a>
+                <img src="{{ asset('storage/logo.svg') }}" alt="logo">
             </div>
-
             <div class="header__inner">
                 @if(Auth::check())
                     @php
@@ -42,7 +39,6 @@
                 @endif
             </div>
         </header>
-
         <main>
             @yield('content')
             @yield('js')

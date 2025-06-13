@@ -62,14 +62,14 @@ body {
     margin-right: 20%;
 }
 
-.approve-form__button{
+.approve-form__button {
     width: 75%;
     height: auto;
     display: flex;
-    justify-content: end;  
+    justify-content: end;
 }
 
-.approve-form__button--submit{
+.approve-form__button--submit {
     margin: 50px 0 50px 0;
     height: 45px;
     width: 170px;
@@ -80,7 +80,7 @@ body {
     cursor: pointer;
 }
 
-.approve-form__button--disabled{
+.approve-form__button--disabled {
     margin: 50px 0 50px 0;
     height: 45px;
     width: 170px;
@@ -91,7 +91,7 @@ body {
     border: none;
 }
 
-.approve-form__input--requested{
+.approve-form__input--requested {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -107,63 +107,62 @@ body {
     padding: 0 5px;
 }
 
-@media(min-width: 768px) and (max-width: 850px) {
-
+@media (min-width: 768px) and (max-width: 850px) {
     .approve-form {
         top: 80px;
         left: 10%;
     }
-    
+
     .approve-form__title {
         border-left: solid 8px black;
         padding-left: 20px;
         font-size: 20px;
         margin-bottom: 50px;
     }
-    
+
     .approve-form__table {
         width: 100%;
         font-size: 14px;
     }
-    
+
     .approve-form__label {
         padding: 30px 0 30px 90px;
         font-size: 14px;
     }
-    
+
     .approve-form__value {
         font-size: 14px;
         padding-left: 20px;
     }
-    
-    .approve-form__button{
+
+    .approve-form__button {
         width: 100%;
     }
-    
-    .approve-form__button--submit{
+
+    .approve-form__button--submit {
         margin: 30px 0 30px 0;
         height: 35px;
         width: 120px;
         font-size: 14px;
     }
-    
-    .approve-form__button--disabled{
+
+    .approve-form__button--disabled {
         margin: 30px 0 30px 0;
         height: 35px;
         width: 120px;
         font-size: 14px;
     }
-    
-    .approve-form__input--requested{
+
+    .approve-form__input--requested {
         display: flex;
         justify-content: space-between;
         align-items: center;
         width: 47%;
-        padding: 0
+        padding: 0;
     }
-    
+
     .approve-form__note--requested {
         font-size: 14px;
         padding-left: 20px;
     }
-}    
+}

@@ -25,8 +25,6 @@
             @csrf
             <button type="submit" class="mail_resend--button">認証メールを再送信する</button>
         </form>
-
     </div>
 </div>
-
 @endsection
