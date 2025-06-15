@@ -80,9 +80,9 @@ password: admin1111
  ```
 
 ## 使用技術(実行環境)
-- PHP8.2.28
+- PHP8.3.0 
 - Laravel8.83.29
-- MySQL8.0.26
+- MySQL15.1
 
 ## ER図
 ![attendance-system](https://github.com/user-attachments/assets/409382a9-83e4-46d0-a320-67fb4441e92d)
